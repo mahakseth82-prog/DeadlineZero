@@ -1,0 +1,6 @@
+{
+  "name": "DeadlineZero",
+  "description": "AI-powered productivity agent that prevents missed deadlines through risk prediction, scheduling, and panic recovery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
