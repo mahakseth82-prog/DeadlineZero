@@ -260,26 +260,61 @@ export const TaskManagementView: React.FC = () => {
 
   // AI Breakdown checklist generator
   const handleTriggerAIBreakdown = async (task: Task) => {
+  try {
     setIsBreakingDown(true);
-    addToast('Analyzing Objective', 'Querying Chrono engine to synthesize milestone subtasks...', 'info');
-    
-    // Simulate smart subtask breakdown
-    setTimeout(() => {
-      const mockSteps = [
-        'Analyze scope limits and map exact schema constraints',
-        'Deconstruct foreign keys and ON DELETE CASCADE triggers',
-        'Configure local state cache synchronization modules',
-        'Run build validation and boundary assertions'
-      ];
-      
-      mockSteps.forEach(title => {
-        addSubtask(task.id, title);
+
+    addToast(
+      "Analyzing Task",
+      "Chrono AI is breaking your task into executable steps...",
+      "info"
+    );
+
+    const response = await fetch("/api/ai/task-breakdown", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        taskTitle: task.title,
+        taskDescription: task.description,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to generate breakdown");
+    }
+
+    const data = await response.json();
+
+    if (data.subtasks && Array.isArray(data.subtasks)) {
+      data.subtasks.forEach((step: string) => {
+        addSubtask(task.id, step);
       });
-      
-      setIsBreakingDown(false);
-      addToast('Checklist Synthesized', `Generated ${mockSteps.length} milestone steps for "${task.title}".`, 'success');
-    }, 1800);
-  };
+
+      addToast(
+        "AI Breakdown Ready",
+        `${data.subtasks.length} subtasks generated successfully.`,
+        "success"
+      );
+    } else {
+      addToast(
+        "No Steps Generated",
+        "Chrono AI couldn't generate subtasks.",
+        "warning"
+      );
+    }
+  } catch (err) {
+    console.error(err);
+
+    addToast(
+      "AI Error",
+      "Unable to contact Chrono AI.",
+      "error"
+    );
+  } finally {
+    setIsBreakingDown(false);
+  }
+};
 
   // Drag and Drop implementation for board view
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
