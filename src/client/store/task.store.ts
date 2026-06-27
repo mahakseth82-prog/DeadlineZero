@@ -230,7 +230,7 @@ interface TaskState {
 export const useTaskStore = create<TaskState>()(
   persist(
     (set, get) => ({
-      tasks: INITIAL_TASKS,
+      tasks: [],
       categories: INITIAL_CATEGORIES,
       schedules: INITIAL_SCHEDULES,
 
