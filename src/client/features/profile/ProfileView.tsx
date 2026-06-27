@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useAuthStore } from '../../store/auth.store';
 import { useUiStore } from '../../store/ui.store';
 import { useNavigate } from 'react-router-dom';
@@ -158,7 +158,7 @@ export const FloatingLabelInput: React.FC<FloatingInputProps> = ({
             color: isFocused ? "#3b82f6" : "#71717a",
             backgroundColor: (isFocused || hasValue) ? "#09090b" : "transparent"
           }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
+          transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
           className="absolute left-3 px-1 text-xs pointer-events-none select-none z-10 font-medium origin-left"
         >
           {label}
@@ -231,7 +231,7 @@ export const FloatingLabelTextarea: React.FC<FloatingTextareaProps> = ({
             color: isFocused ? "#3b82f6" : "#71717a",
             backgroundColor: (isFocused || hasValue) ? "#09090b" : "transparent"
           }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
+          transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
           className="absolute left-3 top-3 px-1 text-xs pointer-events-none select-none z-10 font-medium origin-left"
         >
           {label}
@@ -535,7 +535,7 @@ export const ProfileView: React.FC = () => {
   }
 
   // Framer Motion staggered transition layouts for independent columns
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -545,12 +545,12 @@ export const ProfileView: React.FC = () => {
     }
   };
 
-  const itemVariants = {
+ const itemVariants: Variants = {
     hidden: { opacity: 0, y: 12 },
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.45, ease: "easeOut" }
+      transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }
     }
   };
 
@@ -587,7 +587,7 @@ export const ProfileView: React.FC = () => {
             <span className="relative flex h-2 w-2">
               <motion.span
                 animate={{ scale: [1, 2, 1], opacity: [0.75, 0, 0.75] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
                 className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
               />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />

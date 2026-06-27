@@ -92,7 +92,7 @@ const AuthChronoCore: React.FC = () => {
               "0 0 25px rgba(139,92,246,0.3)",
             ],
           }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 3, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
           style={{ translateZ: 60 }}
           className="absolute w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-tr from-violet-600 via-indigo-500 to-cyan-400 flex items-center justify-center border border-white/15"
         >
@@ -118,7 +118,7 @@ const AuthChronoCore: React.FC = () => {
               transition={{
                 duration: 4 + Math.random() * 4,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.42, 0, 0.58, 1],
               }}
             />
           ))}
@@ -154,7 +154,7 @@ const GoogleIcon: React.FC = () => (
 
 export const SignupView: React.FC = () => {
   const navigate = useNavigate();
-  const { signup } = useAuthStore();
+ const { signup, googleLogin } = useAuthStore();
   const { addToast } = useUiStore();
 
   // State Fields
@@ -290,7 +290,15 @@ export const SignupView: React.FC = () => {
 
     setLoading(true);
     try {
-      await signup(email);
+     const success = await signup(
+  fullName,
+  email,
+  password
+);
+
+if (!success) {
+  throw new Error("Signup failed");
+}
       addToast('Account Created', "Welcome to DeadlineZero! Let's build your productivity profile.", 'success');
       navigate('/app/onboarding');
     } catch (err) {
@@ -303,7 +311,11 @@ export const SignupView: React.FC = () => {
   const handleOAuthSignup = async (provider: 'google' | 'github') => {
     setLoading(true);
     try {
-      await signup('mahakseth82@gmail.com');
+      const success = await googleLogin();
+
+if (!success) {
+  throw new Error("Google signup failed");
+}
       addToast('SSO Signed Up', `Workspace generated seamlessly via ${provider === 'google' ? 'Google secure' : 'GitHub developer'} identity.`, 'success');
       navigate('/app/onboarding');
     } catch (err) {
@@ -388,7 +400,7 @@ export const SignupView: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             className="w-full max-w-md my-auto py-8"
           >
             {/* Header */}

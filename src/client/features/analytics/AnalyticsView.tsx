@@ -119,7 +119,7 @@ const Sparkline: React.FC<{ data: number[]; color?: string }> = ({ data, color =
         points={points}
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
+        transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
       />
     </svg>
   );
@@ -403,7 +403,7 @@ const CircularProgress: React.FC<{
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
             animate={{ strokeDashoffset: strokeOffset }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
             strokeLinecap="round"
           />
         </svg>
@@ -623,7 +623,7 @@ const TimelineChart: React.FC = () => {
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
+            transition={{ duration: 1.2, ease: [0.42, 0, 0.58, 1] }}
           />
 
           {/* Data vertex dots */}
@@ -834,7 +834,7 @@ export const AnalyticsView: React.FC = () => {
     <motion.div 
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       className="space-y-8 max-w-7xl mx-auto pb-12"
       id="analytics-page-root"
     >

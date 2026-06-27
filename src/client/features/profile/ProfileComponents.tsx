@@ -138,7 +138,7 @@ export const PremiumCard: React.FC<{
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay, ease: "easeOut" }}
+      transition={{ duration: 0.45, delay, ease: [0.25, 0.1, 0.25, 1] }}
       style={{
         rotateX: tilt.x,
         rotateY: tilt.y,
@@ -149,7 +149,7 @@ export const PremiumCard: React.FC<{
       whileHover={{ 
         y: -5, 
         scale: 1.02, 
-        transition: { duration: 0.25, ease: "easeOut" }
+        transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }
       }}
       className={`relative group bg-zinc-950/45 backdrop-blur-md border border-white/[0.05] rounded-3xl p-5 overflow-hidden transition-all duration-300 ${glowBorderColors[glowColor]} ${className}`}
     >
@@ -220,7 +220,7 @@ export const InteractiveAvatar: React.FC<{ src: string }> = ({ src }) => {
             "0 0 12px rgba(59, 130, 246, 0.3)"
           ]
         }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 4, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
         className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-600/10 to-cyan-400/10 blur-xs pointer-events-none"
       />
 
@@ -255,7 +255,7 @@ export const InteractiveAvatar: React.FC<{ src: string }> = ({ src }) => {
             initial={{ width: 0, height: 0, opacity: 0.8 }}
             animate={{ width: 140, height: 140, opacity: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
           />
         ))}
       </AnimatePresence>
@@ -310,7 +310,7 @@ export const AnimatedXPProgressBar: React.FC = () => {
           className="relative h-full rounded-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.45)] overflow-hidden"
           initial={{ width: 0 }}
           animate={isInView ? { width: `${targetPercent}%` } : { width: 0 }}
-          transition={{ duration: 1.8, ease: "easeOut" }}
+          transition={{ duration: 1.8, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.12)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.12)_50%,rgba(255,255,255,0.12)_75%,transparent_75%,transparent)] bg-[size:16px_16px] animate-[shimmer-sweep_15s_infinite_linear]" />
           
@@ -361,7 +361,7 @@ export const RadialStat: React.FC<{ percent: number; label: string; color: strin
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
             animate={isInView ? { strokeDashoffset: offset } : { strokeDashoffset: circumference }}
-            transition={{ duration: 1.5, ease: "easeOut", delay: delay * 0.1 }}
+            transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1], delay: delay * 0.1 }}
             strokeLinecap="round"
             style={{ filter: `drop-shadow(0 0 3px ${color}25)` }}
           />

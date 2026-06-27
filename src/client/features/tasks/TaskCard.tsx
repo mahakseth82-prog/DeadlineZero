@@ -110,9 +110,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   // --- RENDERING COMPACT VIEW ---
   if (viewMode === 'compact') {
     return (
-      <motion.div
+      <div
         onClick={onClick}
-        whileHover={{ x: 4, scale: 1.002 }}
+      
         className="group relative flex items-center justify-between gap-4 py-2 px-4 bg-white/30 dark:bg-zinc-900/35 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 rounded-xl hover:border-violet-500/30 hover:bg-white/50 dark:hover:bg-zinc-900/50 transition-all duration-300 cursor-pointer"
       >
         <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -179,7 +179,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
@@ -206,9 +206,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {isOverdue && <span className="bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded border border-red-500/20 text-[8px]">LATE</span>}
           </div>
 
-          <motion.div
+          <div
             onClick={onClick}
-            whileHover={{ y: -1, scale: 1.005 }}
+           
             className="bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 rounded-xl p-3.5 hover:border-violet-500/30 shadow-sm transition-all duration-300 relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
           >
             <div className="space-y-1 min-w-0 flex-1">
@@ -255,7 +255,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 <Trash2 className="w-4 h-4 text-red-400" />
               </Button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     );
@@ -265,7 +265,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   const isKanban = viewMode === 'kanban';
 
   return (
-    <motion.div
+    <div
       draggable={draggable}
       onDragStart={onDragStart}
       onClick={onClick}
@@ -351,7 +351,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         <div className="flex items-center gap-1.5">
           {onStartFocus && !isCompleted && (
             <Button
-              size="xs"
+              size="sm"
               onClick={(e) => { e.stopPropagation(); onStartFocus(); }}
               className="px-2 py-1 h-6 text-[8.5px] font-mono font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-700 text-white border-none gap-1 shrink-0 rounded-lg"
             >
@@ -387,6 +387,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };

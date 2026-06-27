@@ -210,7 +210,7 @@ const PremiumProgressBar: React.FC<{ value: number; colorClass?: string }> = ({ 
         initial={{ width: 0 }}
         whileInView={{ width: `${value}%` }}
         viewport={{ once: true }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
         className={`h-full bg-gradient-to-r ${colorClass} rounded-full`}
       />
     </div>
@@ -272,7 +272,7 @@ const PremiumBackgroundEffects: React.FC = () => {
           transition={{
             duration: 14,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.42, 0, 0.58, 1],
           }}
           className="absolute top-[18%] left-[22%] w-1.5 h-1.5 rounded-full bg-blue-400"
         />
@@ -284,7 +284,7 @@ const PremiumBackgroundEffects: React.FC = () => {
           transition={{
             duration: 18,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.42, 0, 0.58, 1],
             delay: 3,
           }}
           className="absolute top-[48%] left-[68%] w-2 h-2 rounded-full bg-indigo-400 blur-[0.5px]"
@@ -297,7 +297,7 @@ const PremiumBackgroundEffects: React.FC = () => {
           transition={{
             duration: 11,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.42, 0, 0.58, 1],
             delay: 5,
           }}
           className="absolute bottom-[28%] left-[42%] w-1 h-1 rounded-full bg-cyan-400"
@@ -354,7 +354,7 @@ const ChronoStatusTicker: React.FC = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
+            transition={{ duration: 0.35, ease: [0.42, 0, 0.58, 1] }}
             className="font-light text-zinc-300 block"
           >
             {steps[currentStep]}
@@ -381,7 +381,7 @@ const ChronoAvatar: React.FC<{ isThinking: boolean; isResponding: boolean }> = (
         }}
         transition={{ 
           rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-          scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+          scale: { duration: 3, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }
         }}
         className={`absolute inset-0 rounded-full border border-dashed transition-colors duration-500 ${
           isThinking ? 'border-blue-400/50' : 'border-blue-500/15'
@@ -397,7 +397,7 @@ const ChronoAvatar: React.FC<{ isThinking: boolean; isResponding: boolean }> = (
         transition={{
           duration: isThinking ? 1.5 : 4.5,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: [0.42, 0, 0.58, 1],
         }}
         className={`absolute inset-[-6px] rounded-full blur-xl pointer-events-none transition-all duration-500 bg-gradient-to-r from-blue-500/40 via-cyan-400/35 to-indigo-500/40`}
       />
@@ -411,7 +411,7 @@ const ChronoAvatar: React.FC<{ isThinking: boolean; isResponding: boolean }> = (
         transition={{
           duration: 4,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: [0.42, 0, 0.58, 1]
         }}
       >
         {/* Subtle radial inner shine */}
@@ -473,7 +473,7 @@ const DecisionEngineCard: React.FC = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             className="px-3.5 pb-3.5 pt-1 border-t border-white/[0.02] text-left space-y-2.5"
           >
             <ul className="space-y-1.5 text-[11px] text-zinc-400 font-light list-disc pl-4 pt-1.5">
@@ -539,7 +539,7 @@ const CoachMessageBubble: React.FC<{
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                 className="space-y-4 pt-1"
               >
                 {/* Priority Targets with premium layouts */}
@@ -553,7 +553,7 @@ const CoachMessageBubble: React.FC<{
                         <motion.div
                           key={idx}
                           whileHover={{ scale: 1.02, y: -2 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
                           className="p-4 bg-zinc-900/40 border border-blue-500/10 hover:border-blue-500/30 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.01),0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_24px_rgba(59,130,246,0.04)]"
                         >
                           <div className="space-y-1.5 text-left flex-1">
@@ -571,7 +571,7 @@ const CoachMessageBubble: React.FC<{
                           </div>
                           <div className="flex gap-2 flex-shrink-0 self-start sm:self-auto">
                             <Button
-                              size="xs"
+                              size="sm"
                               onClick={() => onNavigate('/app/focus-room')}
                               className="bg-blue-600 hover:bg-blue-500 text-[10px] font-bold text-white px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md transition-all duration-250 active:scale-95"
                             >
@@ -604,14 +604,14 @@ const CoachMessageBubble: React.FC<{
                     </div>
                     <div className="flex gap-2 pt-1 ml-2.5">
                       <Button
-                        size="xs"
+                        size="sm"
                         onClick={onApplyPlan}
                         className="bg-cyan-600 hover:bg-cyan-500 text-[10px] font-bold text-zinc-950 px-3.5 py-2 rounded-xl flex items-center gap-1 shadow-md active:scale-95 duration-250"
                       >
                         <Check className="w-3.5 h-3.5 stroke-[3px]" /> Apply Plan
                       </Button>
                       <Button
-                        size="xs"
+                        size="sm"
                         variant="outline"
                         onClick={() => onNavigate('/app/calendar')}
                         className="border-white/[0.06] hover:bg-white/[0.02] text-[10px] font-medium text-zinc-400 px-3.5 py-2 rounded-xl active:scale-95 duration-250"
@@ -639,7 +639,7 @@ const CoachMessageBubble: React.FC<{
                           </div>
                           <p className="text-[11px] text-zinc-400 leading-normal font-light">{w.warning}</p>
                           <Button
-                            size="xs"
+                            size="sm"
                             onClick={() => onNavigate('/app/panic-mode')}
                             className="bg-rose-600/80 hover:bg-rose-600 text-[10px] font-bold text-white px-3 py-2 rounded-xl flex items-center gap-1 active:scale-95 duration-250"
                           >
@@ -1267,7 +1267,7 @@ export const AiCoachView: React.FC = () => {
                             <p className="text-[11px] text-zinc-400 font-light leading-normal">{m.recommendation}</p>
                             {m.actionPath && (
                               <Button
-                                size="xs"
+                                size="sm"
                                 variant="outline"
                                 onClick={() => navigate(m.actionPath!)}
                                 className="border-indigo-500/10 hover:bg-indigo-500/5 text-[9px] text-indigo-300 font-bold px-2.5 py-1.5 rounded-lg mt-2 w-full justify-center flex items-center"

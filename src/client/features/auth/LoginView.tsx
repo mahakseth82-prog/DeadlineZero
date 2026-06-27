@@ -92,7 +92,7 @@ const AuthChronoCore: React.FC = () => {
               "0 0 25px rgba(139,92,246,0.3)",
             ],
           }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 3, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
           style={{ translateZ: 60 }}
           className="absolute w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-tr from-violet-600 via-indigo-500 to-cyan-400 flex items-center justify-center border border-white/15"
         >
@@ -118,7 +118,7 @@ const AuthChronoCore: React.FC = () => {
               transition={{
                 duration: 4 + Math.random() * 4,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.42, 0, 0.58, 1],
               }}
             />
           ))}
@@ -154,7 +154,7 @@ const GoogleIcon: React.FC = () => (
 
 export const LoginView: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+ const { login, googleLogin } = useAuthStore();
   const { addToast } = useUiStore();
   
   // State variables
@@ -209,7 +209,11 @@ export const LoginView: React.FC = () => {
 
     setLoading(true);
     try {
-      await login(email);
+      const success = await login(email, password);
+
+if (!success) {
+  throw new Error("Login failed");
+}
       addToast('Welcome Back', 'Successfully authenticated session!', 'success');
       navigate('/app/dashboard');
     } catch (err) {
@@ -222,7 +226,11 @@ export const LoginView: React.FC = () => {
   const handleOAuthLogin = async (provider: 'google' | 'github') => {
     setLoading(true);
     try {
-      await login('mahakseth82@gmail.com');
+      const success = await googleLogin();
+
+if (!success) {
+  throw new Error("Google login failed");
+}
       addToast('OAuth Connected', `Authorized seamlessly via secure ${provider === 'google' ? 'Google SSO' : 'GitHub integration'}.`, 'success');
       navigate('/app/dashboard');
     } catch (err) {
@@ -316,7 +324,7 @@ export const LoginView: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             className="w-full max-w-md"
           >
             {/* Header */}

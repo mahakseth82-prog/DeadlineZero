@@ -89,7 +89,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
               initial={{ height: 0, opacity: 0, y: -5 }}
               animate={{ height: "auto", opacity: 1, y: 0 }}
               exit={{ height: 0, opacity: 0, y: -5 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
+              transition={{ duration: 0.25, ease: [0.42, 0, 0.58, 1] }}
               className="overflow-hidden"
             >
               <div className="mt-3 p-3.5 bg-zinc-950 border border-white/[0.04] rounded-xl space-y-2.5 text-[9px] font-mono text-zinc-400">
@@ -232,7 +232,7 @@ export const FloatingBackground: React.FC = () => {
             transition={{
               duration: 8 + Math.random() * 6,
               repeat: Infinity,
-              ease: "easeInOut",
+              ease: [0.42, 0, 0.58, 1],
               delay: Math.random() * 5
             }}
           />

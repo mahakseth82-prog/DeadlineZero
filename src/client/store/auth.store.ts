@@ -7,14 +7,20 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { UserProfile } from '../../types';
 import { safeLocalStorage } from '../utils/storage';
+import { AuthService } from "../services/auth.service";
 
 interface AuthState {
   accessToken: string | null;
   user: UserProfile | null;
   isAuthenticated: boolean;
   isOnboarded: boolean;
-  login: (email: string) => Promise<boolean>;
-  signup: (email: string) => Promise<boolean>;
+ login: (email: string, password: string) => Promise<boolean>;
+signup: (
+  fullName: string,
+  email: string,
+  password: string
+) => Promise<boolean>;
+googleLogin: () => Promise<boolean>;
   logout: () => void;
   updateProfile: (profile: Partial<UserProfile>) => void;
   setOnboarded: (status: boolean) => void;
@@ -40,40 +46,87 @@ const DEFAULT_MOCK_PROFILE: UserProfile = {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      accessToken: 'mock-jwt-token-xyz',
-      user: DEFAULT_MOCK_PROFILE,
-      isAuthenticated: true, // Auto-login to show immediate dashboards in Hackathon MVP
-      isOnboarded: true,
+     accessToken: null,
+user: null,
+isAuthenticated: false,
+isOnboarded: false,
+     login: async (email: string, password: string) => {
+  try {
+    const firebaseUser = await AuthService.login(email, password);
 
-      login: async (email: string) => {
-        set({
-          accessToken: 'mock-jwt-token-xyz',
-          user: {
-            ...DEFAULT_MOCK_PROFILE,
-            email,
-          },
-          isAuthenticated: true,
-        });
-        return true;
+    set({
+      accessToken: await firebaseUser.getIdToken(),
+      user: {
+        ...DEFAULT_MOCK_PROFILE,
+        id: firebaseUser.uid,
+        userId: firebaseUser.uid,
+        email: firebaseUser.email ?? email,
       },
+      isAuthenticated: true,
+    });
 
-      signup: async (email: string) => {
-        set({
-          accessToken: 'mock-jwt-token-xyz',
-          user: {
-            ...DEFAULT_MOCK_PROFILE,
-            email,
-            currentStreak: 0,
-            longestStreak: 0,
-            productivityScore: 0,
-            focusScore: 0,
-          },
-          isAuthenticated: true,
-          isOnboarded: false, // Force them to onboarding
-        });
-        return true;
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
+
+      signup: async (
+  fullName: string,
+  email: string,
+  password: string
+) => {
+  try {
+    const firebaseUser = await AuthService.signup(
+      fullName,
+      email,
+      password
+    );
+
+    set({
+      accessToken: await firebaseUser.getIdToken(),
+      user: {
+        ...DEFAULT_MOCK_PROFILE,
+        id: firebaseUser.uid,
+        userId: firebaseUser.uid,
+        email: firebaseUser.email ?? email,
+        currentStreak: 0,
+        longestStreak: 0,
+        productivityScore: 0,
+        focusScore: 0,
       },
+      isAuthenticated: true,
+      isOnboarded: false,
+    });
 
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
+googleLogin: async () => {
+  try {
+    const firebaseUser = await AuthService.googleLogin();
+
+    set({
+      accessToken: await firebaseUser.getIdToken(),
+      user: {
+        ...DEFAULT_MOCK_PROFILE,
+        id: firebaseUser.uid,
+        userId: firebaseUser.uid,
+        email: firebaseUser.email ?? "",
+      },
+      isAuthenticated: true,
+    });
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
       logout: () => {
         set({
           accessToken: null,

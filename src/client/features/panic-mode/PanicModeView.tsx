@@ -41,7 +41,7 @@ const AssistantAvatar: React.FC<{ isThinking: boolean }> = ({ isThinking }) => {
         transition={{
           duration: isThinking ? 1.4 : 3.2,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: [0.42, 0, 0.58, 1],
         }}
         className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#E85D75]/40 via-[#D9485F]/20 to-zinc-900 blur-sm pointer-events-none"
       />
@@ -66,7 +66,7 @@ const AssistantAvatar: React.FC<{ isThinking: boolean }> = ({ isThinking }) => {
           transition={{
             duration: 2.8,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.42, 0, 0.58, 1],
           }}
         >
           <Bot className="w-4 h-4 text-[#E85D75] drop-shadow-[0_0_4px_rgba(232,93,117,0.3)]" />
@@ -121,7 +121,7 @@ const BreathingDot: React.FC<{ className?: string }> = ({ className = "w-1.5 h-1
     transition={{
       duration: 2.5,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: [0.42, 0, 0.58, 1]
     }}
     className={`rounded-full inline-block ${className}`}
   />
@@ -507,7 +507,7 @@ export const PanicModeView: React.FC = () => {
                 transition={{
                   duration: 2.2,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: [0.42, 0, 0.58, 1]
                 }}
                 className="absolute inset-0 bg-[#E85D75]/15 rounded-full blur-md"
               />
@@ -565,7 +565,7 @@ export const PanicModeView: React.FC = () => {
                 y: [-2, 2, -2],
                 boxShadow: ["0 0 10px rgba(16,185,129,0.1)", "0 0 20px rgba(16,185,129,0.25)", "0 0 10px rgba(16,185,129,0.1)"]
               }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 4, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
               className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-md"
             >
               <CheckCircle className="w-8 h-8 stroke-[2]" />
@@ -639,13 +639,13 @@ export const PanicModeView: React.FC = () => {
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${overallProgressPercent}%` }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
                 className="bg-gradient-to-r from-[#E85D75] to-[#D9485F] h-full rounded-full relative overflow-hidden"
               >
                 {/* Slow moving subtle shimmer travelling left to right every 3 seconds */}
                 <motion.div
                   animate={{ x: ["-100%", "250%"] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{ duration: 3, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/12 to-transparent w-1/2 pointer-events-none"
                 />
               </motion.div>
@@ -687,7 +687,7 @@ export const PanicModeView: React.FC = () => {
                           y: -4,
                           boxShadow: "0 20px 40px -16px rgba(0,0,0,0.95), 0 0 15px rgba(232, 93, 117, 0.06), inset 0 1px 1px rgba(255,255,255,0.05)"
                         }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                         className="rounded-2xl border border-white/[0.05] bg-zinc-950/40 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.03),_0_12px_24px_-10px_rgba(0,0,0,0.6)] overflow-hidden cursor-pointer transition-all duration-250 ease-out hover:border-[#E85D75]/20"
                       >
                         <div className="py-[26px] sm:py-7 px-6 sm:px-7 flex flex-col justify-between gap-5 relative overflow-hidden">
@@ -759,7 +759,7 @@ export const PanicModeView: React.FC = () => {
                               }}
                               transition={{
                                 type: "tween",
-                                ease: "easeOut",
+                                ease: [0.25, 0.1, 0.25, 1],
                                 duration: 0.25,
                               }}
                               onClick={() => {
@@ -781,7 +781,7 @@ export const PanicModeView: React.FC = () => {
                                 variants={{
                                   hover: { x: 5 }
                                 }}
-                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                                 className="ml-0.5"
                               >
                                 →
@@ -827,7 +827,7 @@ export const PanicModeView: React.FC = () => {
                           strokeDasharray={circumference}
                           initial={{ strokeDashoffset: circumference }}
                           animate={{ strokeDashoffset }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
+                          transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
                         />
                       </svg>
                       <span className="absolute text-xs font-mono font-bold text-white">
@@ -872,7 +872,7 @@ export const PanicModeView: React.FC = () => {
                           initial={{ opacity: 0, y: 4 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          transition={{ duration: 0.35, ease: "easeOut" }}
+                          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
                           className="text-[11px] text-zinc-300 font-medium leading-relaxed"
                         >
                           "{RECOMMENDATIONS[recIndex]}"
@@ -939,7 +939,7 @@ export const PanicModeView: React.FC = () => {
                           </span>
                         </div>
                         <Button 
-                          size="xs"
+                          size="sm"
                           variant="outline"
                           onClick={() => {
                             const steps = task.subtasks?.length > 0 
@@ -981,7 +981,7 @@ export const PanicModeView: React.FC = () => {
                   <div className="flex gap-2">
                     <Button 
                       variant="outline" 
-                      size="xs" 
+                      size="sm" 
                       onClick={handleCancel} 
                       className="text-[10px] font-bold border-zinc-800 text-zinc-400 hover:bg-zinc-800 cursor-pointer"
                     >
@@ -1058,7 +1058,7 @@ export const PanicModeView: React.FC = () => {
                         }}
                         transition={{
                           type: "tween",
-                          ease: "easeOut",
+                          ease: [0.25, 0.1, 0.25, 1],
                           duration: 0.25,
                         }}
                         onClick={() => navigate('/app/focus-room')}
@@ -1070,7 +1070,7 @@ export const PanicModeView: React.FC = () => {
                           variants={{
                             hover: { x: 5 }
                           }}
-                          transition={{ duration: 0.25, ease: "easeOut" }}
+                          transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                           className="ml-0.5"
                         >
                           →
@@ -1149,7 +1149,7 @@ export const PanicModeView: React.FC = () => {
                           strokeDasharray={2 * Math.PI * 20}
                           initial={{ strokeDashoffset: 2 * Math.PI * 20 }}
                           animate={{ strokeDashoffset: (2 * Math.PI * 20) - (recoverySuccessPrediction / 100) * (2 * Math.PI * 20) }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
+                          transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
                         />
                       </svg>
                       <span className="absolute text-[11px] font-mono font-bold text-white">
@@ -1188,7 +1188,7 @@ export const PanicModeView: React.FC = () => {
                           initial={{ opacity: 0, y: 4 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          transition={{ duration: 0.35, ease: "easeOut" }}
+                          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
                           className="text-[11px] font-medium leading-relaxed text-left"
                         >
                           "{RECOMMENDATIONS[recIndex]}"

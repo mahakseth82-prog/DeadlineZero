@@ -114,7 +114,7 @@ export const AppLayout: React.FC = () => {
           transition={{
             duration: 32,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.42, 0, 0.58, 1],
           }}
           className="absolute top-[20%] left-[15%] w-72 h-72 rounded-full bg-violet-500/[0.05] dark:bg-violet-500/[0.08] blur-[70px] pointer-events-none"
         />
@@ -127,7 +127,7 @@ export const AppLayout: React.FC = () => {
           transition={{
             duration: 36,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: [0.42, 0, 0.58, 1],
           }}
           className="absolute bottom-[20%] right-[15%] w-[380px] h-[380px] rounded-full bg-indigo-500/[0.04] dark:bg-indigo-500/[0.07] blur-[90px] pointer-events-none"
         />

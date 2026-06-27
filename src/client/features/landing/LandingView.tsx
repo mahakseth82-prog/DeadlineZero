@@ -109,7 +109,7 @@ const ChronoCore: React.FC = () => {
               "0 0 30px rgba(139,92,246,0.3)",
             ],
           }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 3, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
           style={{ translateZ: 80 }}
           className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-violet-600 via-indigo-500 to-cyan-400 flex items-center justify-center border border-white/20 shadow-[0_0_35px_rgba(139,92,246,0.4)]"
         >
@@ -135,7 +135,7 @@ const ChronoCore: React.FC = () => {
               transition={{
                 duration: 5 + Math.random() * 5,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.42, 0, 0.58, 1],
               }}
             />
           ))}
@@ -468,7 +468,7 @@ export const LandingView: React.FC = () => {
               transition={{
                 duration: 6 + Math.random() * 8,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: [0.42, 0, 0.58, 1],
                 delay: Math.random() * 5
               }}
             />
@@ -637,7 +637,7 @@ export const LandingView: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+              transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <ChronoCore />
             </motion.div>
