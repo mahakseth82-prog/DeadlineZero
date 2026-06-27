@@ -6,7 +6,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-
+import { FirestoreService } from "./firestore.service";
 import { auth } from "../../lib/firebase";
 
 export const AuthService = {
@@ -20,7 +20,11 @@ export const AuthService = {
     await updateProfile(result.user, {
       displayName: fullName,
     });
-
+await FirestoreService.createUserProfile({
+  uid: result.user.uid,
+  name: fullName,
+  email: result.user.email ?? email,
+});
     return result.user;
   },
 
