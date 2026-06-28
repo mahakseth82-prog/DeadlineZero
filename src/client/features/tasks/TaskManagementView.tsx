@@ -341,7 +341,7 @@ export const TaskManagementView: React.FC = () => {
   };
 
   // Save/Create task
-  const handleSaveTask = (e: React.FormEvent) => {
+  const handleSaveTask = async(e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
 
@@ -356,21 +356,32 @@ export const TaskManagementView: React.FC = () => {
       difficultyScore: newDifficulty,
       energyRequirement: newEnergy,
       project: newProject.trim() || 'General',
-      status: editingTaskId ? undefined : TaskStatus.TODO,
+      
     };
 
     if (editingTaskId) {
-      updateTask(editingTaskId, taskFields);
-      addToast('Milestone Configured', 'Task parameters updated successfully.', 'success');
-    } else {
-      addTask({
-  ...taskFields,
-  status: TaskStatus.TODO,
-  subtasks: tempSubtasks,
-  userId: user?.id ?? "",
-});
-      addToast('Objective Logged', 'Proactive milestone successfully injected into pipeline.', 'success');
-    }
+    
+  await updateTask(editingTaskId, taskFields);
+
+  addToast(
+    "Milestone Configured",
+    "Task parameters updated successfully.",
+    "success"
+  );
+} else {
+  await addTask({
+    ...taskFields,
+    status: TaskStatus.TODO,
+    subtasks: tempSubtasks,
+    userId: user?.id ?? "",
+  });
+
+  addToast(
+    "Objective Logged",
+    "Proactive milestone successfully injected into pipeline.",
+    "success"
+  );
+}
 
     setIsCreateDialogOpen(false);
     setEditingTaskId(null);

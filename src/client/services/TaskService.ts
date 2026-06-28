@@ -32,15 +32,10 @@ export class TaskService {
   }
 static async createTask(task: Task): Promise<void> {
   try {
-    console.log("Saving task to Firestore:", task);
-
     await setDoc(
       doc(db, this.COLLECTION, task.id),
       task
     );
-
-    console.log("✅ Task saved:", task.id);
-console.log("Project:", db.app.options.projectId);
   } catch (error) {
     console.error("❌ Firestore save failed:", error);
     throw error;

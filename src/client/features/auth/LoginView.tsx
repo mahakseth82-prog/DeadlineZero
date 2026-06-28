@@ -277,11 +277,11 @@ if (!success) {
   }
 
   try {
-    console.log("Forgot Password clicked", email);
+   
 
-  console.log("Calling Firebase...");
+ 
   await AuthService.resetPassword(email);
-  console.log("Firebase call completed");
+ 
 
     addToast(
       "Password Reset",

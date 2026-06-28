@@ -32,7 +32,7 @@ import { formatEffort } from '../../utils/time';
 export const DashboardView: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  console.log("AUTH USER:", user);
+
   const { addToast } = useUiStore();
   const { linkTask, startTimer, setTimeRemaining } = useFocusStore();
   const { triggerPanic } = usePanicStore();

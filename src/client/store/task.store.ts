@@ -208,7 +208,7 @@ interface TaskState {
     isArchived?: boolean;
   }) =>Promise<void>;
   updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
-  deleteTask: (taskId: string) => void;
+  deleteTask: (taskId: string) => Promise<void>;
   loadTasks: (userId: string) => Promise<void>;
   // Subtasks actions
   toggleSubtask: (taskId: string, subtaskId: string) => void;
@@ -294,6 +294,7 @@ await TaskService.createTask(newTask);
   },
 
   updateTask:async (taskId, updates) => {
+  
     await TaskService.updateTask(taskId, updates);
     set((state) => {
       const updatedTasks = state.tasks.map((task) => {
@@ -324,13 +325,14 @@ await TaskService.createTask(newTask);
     });
   },
 
-  deleteTask: (taskId) => {
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== taskId),
-      schedules: state.schedules.filter((s) => s.taskId !== taskId),
-    }));
-  },
+  deleteTask: async (taskId) => {
+  await TaskService.deleteTask(taskId);
 
+  set((state) => ({
+    tasks: state.tasks.filter((task) => task.id !== taskId),
+    schedules: state.schedules.filter((s) => s.taskId !== taskId),
+  }));
+},
   toggleSubtask: (taskId, subtaskId) => {
     set((state) => ({
       tasks: state.tasks.map((task) => {
