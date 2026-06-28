@@ -68,6 +68,7 @@ export async function runPersistenceTests(
       deadline: new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0],
       priority: 'high' as any,
       status: 'pending' as any,
+      userId: "diagnostic-test",
       estimatedTime: 45,
     });
 

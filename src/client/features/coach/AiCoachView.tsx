@@ -40,7 +40,7 @@ import { useFocusStore } from '../../store/focus.store';
 import { usePanicStore } from '../../store/panic.store';
 import { useAuthStore } from '../../store/auth.store';
 import { CoachMessage } from '../../../types';
-
+import { speechService } from "../../utils/speech";
 interface CoachRecommendation {
   recommendation: string;
   priorityTasks: Array<{
@@ -692,16 +692,18 @@ export const AiCoachView: React.FC = () => {
   const { completedPanics } = usePanicStore();
   const { user } = useAuthStore();
 
-  const userFirstName = useMemo(() => {
-    if (user?.email) {
+ const userFirstName = useMemo(() => {
+  if (user?.fullName?.trim()) {
+    return user.fullName;
+  }
+
+  if (user?.email) {
       const parts = user.email.split('@')[0].split('.')[0].split('_')[0];
       let clean = parts.replace(/[0-9]/g, '');
-      if (clean.toLowerCase().startsWith('mahak')) {
-        return 'Mahak';
-      }
+      
       return clean.charAt(0).toUpperCase() + clean.slice(1);
     }
-    return 'Mahak';
+    return 'User';
   }, [user]);
 
   const [messages, setMessages] = useState<CoachMessage[]>([]);
@@ -710,7 +712,9 @@ export const AiCoachView: React.FC = () => {
   const [insightIndex, setInsightIndex] = useState(0);
   const [successActive, setSuccessActive] = useState(false);
   const [isActivatingFocus, setIsActivatingFocus] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
+  
   const handleActivateFocus = () => {
     setIsActivatingFocus(true);
     setTimeout(() => {
@@ -826,7 +830,23 @@ export const AiCoachView: React.FC = () => {
     addToast('Schedule Applied', 'Chrono Coach has synchronized this action plan with your timeline.', 'success');
     setTimeout(() => setSuccessActive(false), 2400);
   };
+const handleVoiceInput = async () => {
+  try {
+    setIsListening(true);
 
+    const transcript = await speechService.startListening();
+
+    setInputText(transcript);
+
+    // Optional: automatically send
+    handleSendMessage(transcript);
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setIsListening(false);
+  }
+};
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return;
 
@@ -1303,28 +1323,30 @@ export const AiCoachView: React.FC = () => {
           </div>
 
           {/* Frosted Command bar message input */}
-          <div className="p-4.5 border-t border-white/[0.04] bg-zinc-950/40 backdrop-blur-xl flex items-center gap-3 z-10 flex-shrink-0">
-            <input
-              type="text"
-              value={inputText}
-              disabled={loading}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder="Ask AI Coach to summarize progress, prioritize tasks, or suggest schedules..."
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(inputText)}
-              className="flex-1 px-5 py-3.5 text-xs sm:text-sm bg-white/[0.01] border border-white/[0.06] focus:border-blue-500/40 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-500/5 text-white placeholder-zinc-500 disabled:opacity-50 transition-all font-light"
-            />
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button 
-                onClick={() => handleSendMessage(inputText)} 
-                disabled={loading || !inputText.trim()} 
-                size="sm" 
-                className="w-11 h-11 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-[0_4px_12px_rgba(37,99,235,0.25)] hover:shadow-[0_4px_18px_rgba(37,99,235,0.45)] border-none flex items-center justify-center cursor-pointer transition-shadow"
-              >
-                <Send className="w-4.5 h-4.5" />
-              </Button>
-            </motion.div>
-          </div>
+          <div className="flex items-center gap-3">
+  <input
+    type="text"
+    value={inputText}
+    disabled={loading}
+    onChange={(e) => setInputText(e.target.value)}
+    placeholder="Ask AI Coach to summarize progress, prioritize tasks, or suggest schedules..."
+    onKeyDown={(e) => e.key === "Enter" && handleSendMessage(inputText)}
+    className="flex-1 px-5 py-3.5 text-xs sm:text-sm bg-white/[0.01] border border-white/[0.06] focus:border-blue-500/40 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-500/5 text-white placeholder-zinc-500 disabled:opacity-50 transition-all font-light"
+  />
 
+  <button
+    type="button"
+    onClick={handleVoiceInput}
+    disabled={isListening || loading}
+    className={`h-12 w-12 rounded-full flex items-center justify-center transition-all ${
+      isListening
+        ? "bg-red-500 text-white animate-pulse"
+        : "bg-violet-600 hover:bg-violet-700 text-white"
+    }`}
+  >
+    {isListening ? "🎙️" : "🎤"}
+  </button>
+</div>
         </div>
 
       </div>

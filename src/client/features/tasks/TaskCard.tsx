@@ -126,16 +126,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <CheckCircle2 className={`w-4 h-4 ${isCompleted ? 'text-emerald-400 fill-emerald-400/10' : ''}`} />
           </button>
 
-          <span className="text-[9px] font-bold font-mono text-zinc-400 uppercase w-16 truncate bg-zinc-100 dark:bg-zinc-800/60 px-1.5 py-0.5 rounded text-center shrink-0">
+          <span className="text-base font-bold font-mono text-zinc-400 uppercase w-16 truncate bg-zinc-100 dark:bg-zinc-800/60 px-1.5 py-0.5 rounded text-center shrink-0">
             {task.project || 'General'}
           </span>
 
-          <h4 className={`text-xs font-bold truncate leading-tight flex-1 ${isCompleted ? 'line-through text-zinc-500 font-medium' : 'text-zinc-800 dark:text-zinc-200'}`}>
+          <h4 className={`text-xl font-bold truncate leading-tight flex-1 ${isCompleted ? 'line-through text-zinc-500 font-medium' : 'text-zinc-800 dark:text-zinc-200'}`}>
             {task.title}
           </h4>
 
           {task.subtasks && task.subtasks.length > 0 && (
-            <div className="hidden md:flex items-center gap-1.5 shrink-0 font-mono text-[9px] text-zinc-400">
+            <div className="hidden md:flex items-center gap-1.5 shrink-0 font-mono text-base text-zinc-400">
               <span>{task.subtasks.filter(s => s.completed).length}/{task.subtasks.length}</span>
               <div className="w-10 bg-zinc-200 dark:bg-zinc-800 h-1 rounded-full overflow-hidden">
                 <div className="bg-violet-500 h-1" style={{ width: `${progress}%` }} />
@@ -145,7 +145,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </div>
 
         <div className="flex items-center gap-4 shrink-0 font-mono text-[10px]">
-          <span className={`px-1.5 py-0.5 rounded font-bold border text-[8px] uppercase ${getPriorityStyle(task.priority)}`}>
+          <span className={`px-1.5 py-0.5 rounded font-bold border text-xs uppercase ${getPriorityStyle(task.priority)}`}>
             {task.priority}
           </span>
 
@@ -163,19 +163,19 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               variant="outline"
               size="sm"
               onClick={onEdit}
-              className="p-1 h-6 w-6 border-zinc-200/80 dark:border-zinc-800/80 rounded"
+              className="p-1 h-11 w-9 border-zinc-200/80 dark:border-zinc-800/80 rounded"
               title="Edit"
             >
-              <Edit className="w-3.5 h-3.5 text-zinc-400" />
+              <Edit className="w-5 h-5 text-zinc-400" />
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={onDelete}
-              className="p-1 h-6 w-6 border-zinc-200/80 dark:border-zinc-800/80 rounded hover:bg-red-500/10 hover:border-red-500/30"
+              className="p-1 h-11 w-9 border-zinc-200/80 dark:border-zinc-800/80 rounded hover:bg-red-500/10 hover:border-red-500/30"
               title="Purge"
             >
-              <Trash2 className="w-3.5 h-3.5 text-red-400" />
+              <Trash2 className="w-5 h-5 text-red-400" />
             </Button>
           </div>
         </div>
@@ -188,7 +188,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     return (
       <div className="flex gap-4 group">
         <div className="flex flex-col items-center shrink-0">
-          <div className={`w-3.5 h-3.5 rounded-full border-2 ${
+          <div className={`w-5 h-5 rounded-full border-2 ${
             isCompleted 
               ? 'bg-emerald-500 border-emerald-500/30' 
               : isOverdue 
@@ -203,7 +203,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <span>{formatDate(task.deadline)}</span>
             <span>•</span>
             <span className={`${isOverdue ? 'text-red-400 font-black' : 'text-zinc-500'}`}>{formatTime(task.deadline)}</span>
-            {isOverdue && <span className="bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded border border-red-500/20 text-[8px]">LATE</span>}
+            {isOverdue && <span className="bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded border border-red-500/20 text-xs">LATE</span>}
           </div>
 
           <div
@@ -213,18 +213,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           >
             <div className="space-y-1 min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-[8px] font-mono font-bold text-zinc-500 uppercase">
+                <span className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-xs font-mono font-bold text-zinc-500 uppercase">
                   {task.project || 'General'}
                 </span>
-                <span className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold border ${getPriorityStyle(task.priority)}`}>
+                <span className={`px-1.5 py-0.5 rounded text-xs font-mono font-bold border ${getPriorityStyle(task.priority)}`}>
                   {task.priority}
                 </span>
-                <span className="text-[9px] font-mono text-zinc-400 flex items-center gap-1">
+                <span className="text-base font-mono text-zinc-400 flex items-center gap-1">
                   <Clock className="w-3 h-3 text-zinc-500" /> {task.estimatedTime}m
                 </span>
               </div>
 
-              <h4 className={`text-xs font-bold ${isCompleted ? 'line-through text-zinc-500' : 'text-zinc-900 dark:text-white'}`}>
+              <h4 className={`text-xl font-bold ${isCompleted ? 'line-through text-zinc-500' : 'text-zinc-900 dark:text-white'}`}>
                 {task.title}
               </h4>
             </div>
@@ -234,25 +234,25 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onStatusChange(isCompleted ? TaskStatus.TODO : TaskStatus.COMPLETED)}
-                className="p-1 h-7 w-7 rounded-lg border-zinc-200/85 dark:border-zinc-800/85 hover:border-emerald-500/30"
+                className="p-1 h-10 w-10 rounded-xl border-zinc-200/85 dark:border-zinc-800/85 hover:border-emerald-500/30"
               >
-                <CheckCircle2 className={`w-4 h-4 ${isCompleted ? 'text-emerald-400' : 'text-zinc-400'}`} />
+                <CheckCircle2 className={`w-5 h-5 ${isCompleted ? 'text-emerald-400' : 'text-zinc-400'}`} />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onEdit}
-                className="p-1 h-7 w-7 rounded-lg border-zinc-200/85 dark:border-zinc-800/85"
+                className="p-1h-10 w-10 rounded-xl border-zinc-200/85 dark:border-zinc-800/85"
               >
-                <Edit className="w-4 h-4 text-zinc-400" />
+                <Edit className="w-5h-5 text-zinc-400" />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onDelete}
-                className="p-1 h-7 w-7 rounded-lg border-zinc-200/85 dark:border-zinc-800/85 hover:bg-red-500/10 hover:border-red-500/30"
+                className="p-1 h-10 w-10 rounded-xl border-zinc-200/85 dark:border-zinc-800/85 hover:bg-red-500/10 hover:border-red-500/30"
               >
-                <Trash2 className="w-4 h-4 text-red-400" />
+                <Trash2 className="w-5 h-5 text-red-400" />
               </Button>
             </div>
           </div>
@@ -277,7 +277,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           : undefined,
         transition: rotateX || rotateY ? 'none' : 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease',
       }}
-      className={`relative bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200/60 dark:border-zinc-800/60 rounded-2xl p-4 cursor-grab active:cursor-grabbing overflow-hidden group premium-card-hover ${
+      className={`relative bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200/60 dark:border-zinc-800/60 rounded-2xl p-6 cursor-grab active:cursor-grabbing overflow-hidden group premium-card-hover ${
         isCompleted ? 'opacity-85' : ''
       }`}
     >
@@ -295,29 +295,29 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {/* Header tags */}
       <div className="flex justify-between items-center gap-1.5 flex-wrap pl-1.5">
         <div className="flex items-center gap-1.5">
-          <span className="px-1.5 py-0.5 rounded bg-zinc-200/60 dark:bg-zinc-800/60 text-[8px] font-bold font-mono text-zinc-500 uppercase tracking-widest">
+          <span className="px-1.5 py-0.5 rounded bg-zinc-200/60 dark:bg-zinc-800/60 text-xs font-bold font-mono text-zinc-500 uppercase tracking-widest">
             {task.project || 'General'}
           </span>
-          <span className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold border ${getPriorityStyle(task.priority)}`}>
+          <span className={`px-1.5 py-0.5 rounded text-xs font-mono font-bold border ${getPriorityStyle(task.priority)}`}>
             {task.priority}
           </span>
         </div>
 
-        <span className="text-[9px] font-mono text-zinc-400 flex items-center gap-1">
+        <span className="text-base font-mono text-zinc-400 flex items-center gap-1">
           <Clock className="w-3 h-3 text-zinc-500" /> {task.estimatedTime}m
         </span>
       </div>
 
       {/* Title & Description */}
       <div className="mt-3 space-y-1.5 pl-1.5">
-        <h4 className={`font-bold text-xs tracking-tight leading-snug ${
+        <h4 className={`font-bold text-xl tracking-tight leading-snug ${
           isCompleted ? 'line-through text-zinc-500' : 'text-zinc-900 dark:text-white'
         }`}>
           {task.title}
         </h4>
 
         {!isKanban && task.description && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+          <p className="text-base text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
             {task.description}
           </p>
         )}
@@ -325,7 +325,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         {/* Subtask progress */}
         {task.subtasks && task.subtasks.length > 0 && (
           <div className="space-y-1 pt-1">
-            <div className="flex justify-between items-center text-[8px] font-mono font-bold text-zinc-400">
+            <div className="flex justify-between items-center text-xs font-mono font-bold text-zinc-400">
               <span className="uppercase">Subtasks</span>
               <span>{task.subtasks.filter(s => s.completed).length}/{task.subtasks.length}</span>
             </div>
@@ -341,8 +341,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
       {/* Footer info & Hover actions */}
       <div className="mt-4 pt-3.5 border-t border-zinc-200/50 dark:border-zinc-800/40 flex justify-between items-center pl-1.5">
-        <div className="text-[9px] font-mono text-zinc-400 flex items-center gap-1">
-          <Calendar className="w-3.5 h-3.5 text-zinc-500" />
+        <div className="text-base font-mono text-zinc-400 flex items-center gap-1">
+          <Calendar className="w-5 h-5 text-zinc-500" />
           <span className={isOverdue ? 'text-red-400 font-bold' : ''}>
             {isOverdue ? 'Overdue' : formatDate(task.deadline)}
           </span>
@@ -353,36 +353,36 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <Button
               size="sm"
               onClick={(e) => { e.stopPropagation(); onStartFocus(); }}
-              className="px-2 py-1 h-6 text-[8.5px] font-mono font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-700 text-white border-none gap-1 shrink-0 rounded-lg"
+              className=" py-1 h-11 text-base px-3 font-mono font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-700 text-white border-none gap-1 shrink-0 rounded-lg"
             >
               <Play className="w-2 h-2 fill-current" /> Focus
             </Button>
           )}
 
-          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200" onClick={e => e.stopPropagation()}>
+          <div className="flex gap-2 opacity-100 group-hover:opacity-100 transition-all duration-200" onClick={e => e.stopPropagation()}>
             <Button
               variant="outline"
               size="sm"
               onClick={() => onStatusChange(isCompleted ? TaskStatus.TODO : TaskStatus.COMPLETED)}
-              className="p-1 h-6 w-6 rounded-lg border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/30 bg-zinc-950/20"
+              className="p-1 h-11 w-9 rounded-lg border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/30 bg-zinc-950/20"
             >
-              <CheckCircle2 className={`w-3.5 h-3.5 ${isCompleted ? 'text-emerald-400' : 'text-zinc-400'}`} />
+              <CheckCircle2 className={`w-5 h-5 ${isCompleted ? 'text-emerald-400' : 'text-zinc-400'}`} />
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={onEdit}
-              className="p-1 h-6 w-6 rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-950/20"
+              className="p-1 h-11 w-9 rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-950/20"
             >
-              <Edit className="w-3.5 h-3.5 text-zinc-400" />
+              <Edit className="w-5 h-5 text-zinc-400" />
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={onDelete}
-              className="p-1 h-6 w-6 rounded-lg border-zinc-200 dark:border-zinc-800 hover:bg-red-500/10 hover:border-red-500/30 bg-zinc-950/20"
+              className="p-1 h-11 w-9 rounded-lg border-zinc-200 dark:border-zinc-800 hover:bg-red-500/10 hover:border-red-500/30 bg-zinc-950/20"
             >
-              <Trash2 className="w-3.5 h-3.5 text-red-400" />
+              <Trash2 className="w-5 h-5 text-red-400" />
             </Button>
           </div>
         </div>

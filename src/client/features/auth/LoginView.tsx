@@ -7,19 +7,20 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store';
 import { useUiStore } from '../../store/ui.store';
+import { AuthService } from "../../services/auth.service";
 import { Button } from '../../components/ui/Button';
 import { 
   Mail, 
   Lock, 
   Eye, 
   EyeOff, 
-  Github, 
+  GitBranch, 
   Check, 
   AlertCircle, 
   Sparkles, 
   Zap, 
   ArrowRight,
-  ShieldAlert
+  ShieldAlert,X
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -155,11 +156,11 @@ const GoogleIcon: React.FC = () => (
 export const LoginView: React.FC = () => {
   const navigate = useNavigate();
  const { login, googleLogin } = useAuthStore();
-  const { addToast } = useUiStore();
+  const { addToast, toasts, dismissToast } = useUiStore();
   
   // State variables
-  const [email, setEmail] = useState('mahakseth82@gmail.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -216,8 +217,33 @@ if (!success) {
 }
       addToast('Welcome Back', 'Successfully authenticated session!', 'success');
       navigate('/app/dashboard');
-    } catch (err) {
-      addToast('Auth Error', 'Could not verify user password.', 'error');
+}catch (err: any) {
+  let message = "Something went wrong.";
+
+  switch (err.code) {
+    case "auth/invalid-credential":
+      message = "Incorrect email or password.";
+      break;
+
+    case "auth/email-already-in-use":
+      message = "An account with this email already exists.";
+      break;
+
+    case "auth/user-not-found":
+      message = "No account found with this email.";
+      break;
+
+    case "auth/too-many-requests":
+      message = "Too many attempts. Please try again later.";
+      break;
+
+    case "auth/network-request-failed":
+      message = "Please check your internet connection.";
+      break;
+  }
+
+  addToast("Authentication Failed", message, "error");
+
     } finally {
       setLoading(false);
     }
@@ -240,13 +266,48 @@ if (!success) {
     }
   };
 
-  const handleForgotPassword = () => {
-    if (!email) {
-      addToast('Forgot Password', 'Please type your email address first so we can transmit instructions.', 'warning');
-      return;
+  const handleForgotPassword = async () => {
+  if (!email) {
+    addToast(
+      "Forgot Password",
+      "Please enter your email address first.",
+      "warning"
+    );
+    return;
+  }
+
+  try {
+    console.log("Forgot Password clicked", email);
+
+  console.log("Calling Firebase...");
+  await AuthService.resetPassword(email);
+  console.log("Firebase call completed");
+
+    addToast(
+      "Password Reset",
+      "Password reset email sent successfully. Please check your inbox.",
+      "success"
+    );
+  } catch (error: any) {
+    let message = "Failed to send reset email.";
+
+    switch (error.code) {
+      case "auth/user-not-found":
+        message = "No account exists with this email.";
+        break;
+
+      case "auth/invalid-email":
+        message = "Please enter a valid email address.";
+        break;
+
+      case "auth/too-many-requests":
+        message = "Too many requests. Please try again later.";
+        break;
     }
-    addToast('Security Link Transmitted', `A recovery ticket has been logged for ${email}. Check your inbox.`, 'info');
-  };
+
+    addToast("Reset Failed", message, "error");
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#030014] text-zinc-150 flex font-sans selection:bg-violet-500/30 selection:text-white overflow-hidden relative">
@@ -352,7 +413,7 @@ if (!success) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onBlur={() => setEmailTouched(true)}
-                    placeholder="e.g. mahakseth82@gmail.com"
+                    placeholder="e.g. user@example.com"
                     className={`w-full bg-zinc-900/40 border rounded-xl pl-10 pr-10 py-3 text-xs text-white focus:outline-none focus:ring-1 transition-all ${
                       emailTouched && emailError
                         ? 'border-red-500/50 focus:ring-red-500/30'
@@ -480,7 +541,7 @@ if (!success) {
                 onClick={() => handleOAuthLogin('github')}
                 disabled={loading}
               >
-                <Github className="w-4 h-4" />
+                <GitBranch className="w-4 h-4" />
                 <span>GitHub</span>
               </Button>
             </div>
@@ -497,6 +558,35 @@ if (!success) {
         </div>
 
       </div>
+      <div className="fixed top-5 right-5 z-[9999] space-y-3 w-96">
+  {toasts.map((toast) => {
+    const typeColors = {
+      info: "bg-zinc-900 border-zinc-800 text-white",
+      success:
+        "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-400",
+      warning:
+        "bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-400",
+      error:
+        "bg-red-50 border-red-200 text-red-800 dark:bg-red-950/20 dark:border-red-900/40 dark:text-red-400",
+    };
+
+    return (
+      <div
+        key={toast.id}
+        className={`p-4 rounded-xl border shadow-lg flex justify-between gap-3 ${typeColors[toast.type]}`}
+      >
+        <div>
+          <h4 className="font-semibold text-sm">{toast.title}</h4>
+          <p className="text-xs mt-1">{toast.message}</p>
+        </div>
+
+        <button onClick={() => dismissToast(toast.id)}>
+          <X size={16} />
+        </button>
+      </div>
+    );
+  })}
+</div>
     </div>
   );
 };

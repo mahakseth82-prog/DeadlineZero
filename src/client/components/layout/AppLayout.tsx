@@ -268,9 +268,11 @@ export const AppLayout: React.FC = () => {
             {/* Profile trigger */}
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium text-zinc-900 dark:text-white truncate max-w-[150px]">
-                  {user?.email.split('@')[0]}
-                </p>
+               <p className="text-sm font-medium text-zinc-900 dark:text-white truncate max-w-[150px]">
+  {user?.fullName?.trim()
+    ? user.fullName
+    : user?.email?.split('@')[0]}
+</p>
                 <p className="text-xs text-zinc-400">
                   Level {Math.floor((user?.productivityScore || 0) / 10) + 1}
                 </p>

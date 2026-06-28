@@ -2,7 +2,6 @@ import {
   doc,
   setDoc,
   getDoc,
-  updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -36,10 +35,14 @@ export const FirestoreService = {
     return snapshot.data();
   },
 
-  async updateUserProfile(
-    uid: string,
-    data: Record<string, any>
-  ) {
-    await updateDoc(doc(db, "users", uid), data);
-  },
-};
+ async updateUserProfile(
+  uid: string,
+  data: Record<string, any>
+) {
+  await setDoc(
+    doc(db, "users", uid),
+    data,
+    { merge: true }
+  );
+}
+}

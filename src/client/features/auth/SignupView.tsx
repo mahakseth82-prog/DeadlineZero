@@ -14,12 +14,12 @@ import {
   Lock, 
   Eye, 
   EyeOff, 
-  Github, 
+  GitBranch, 
   Check, 
   AlertCircle, 
   Sparkles, 
   Zap, 
-  ArrowRight
+  ArrowRight,X
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -155,8 +155,7 @@ const GoogleIcon: React.FC = () => (
 export const SignupView: React.FC = () => {
   const navigate = useNavigate();
  const { signup, googleLogin } = useAuthStore();
-  const { addToast } = useUiStore();
-
+  const { addToast, toasts, dismissToast } = useUiStore();
   // State Fields
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -428,7 +427,7 @@ if (!success) {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     onBlur={() => setFullNameTouched(true)}
-                    placeholder="e.g. Mahak Seth"
+                    placeholder="e.g. Enter your full name"
                     className={`w-full bg-zinc-900/40 border rounded-xl pl-10 pr-10 py-2.5 text-xs text-white focus:outline-none focus:ring-1 transition-all ${
                       fullNameTouched && fullNameError
                         ? 'border-red-500/50 focus:ring-red-500/30'
@@ -467,7 +466,7 @@ if (!success) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onBlur={() => setEmailTouched(true)}
-                    placeholder="e.g. mahakseth82@gmail.com"
+                    placeholder="e.g. user@example.com"
                     className={`w-full bg-zinc-900/40 border rounded-xl pl-10 pr-10 py-2.5 text-xs text-white focus:outline-none focus:ring-1 transition-all ${
                       emailTouched && emailError
                         ? 'border-red-500/50 focus:ring-red-500/30'
@@ -643,7 +642,7 @@ if (!success) {
                 onClick={() => handleOAuthSignup('github')}
                 disabled={loading}
               >
-                <Github className="w-4 h-4" />
+                <GitBranch className="w-4 h-4" />
                 <span>GitHub</span>
               </Button>
             </div>
@@ -660,6 +659,35 @@ if (!success) {
         </div>
 
       </div>
+      <div className="fixed top-5 right-5 z-[9999] space-y-3 w-96">
+  {toasts.map((toast) => {
+    const typeColors = {
+      info: "bg-zinc-900 border-zinc-800 text-white",
+      success:
+        "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/20 dark:border-emerald-900/40 dark:text-emerald-400",
+      warning:
+        "bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-400",
+      error:
+        "bg-red-50 border-red-200 text-red-800 dark:bg-red-950/20 dark:border-red-900/40 dark:text-red-400",
+    };
+
+    return (
+      <div
+        key={toast.id}
+        className={`p-4 rounded-xl border shadow-lg flex justify-between gap-3 ${typeColors[toast.type]}`}
+      >
+        <div>
+          <h4 className="font-semibold text-sm">{toast.title}</h4>
+          <p className="text-xs mt-1">{toast.message}</p>
+        </div>
+
+        <button onClick={() => dismissToast(toast.id)}>
+          <X size={16} />
+        </button>
+      </div>
+    );
+  })}
+</div>
     </div>
   );
 };

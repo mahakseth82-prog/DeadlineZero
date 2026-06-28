@@ -17,15 +17,16 @@ import {
   ShieldCheck, 
   Check, 
   X, 
-  Github, 
-  Twitter, 
-  Linkedin, 
+  GitBranch, 
+  Globe, 
+  Users, 
   Smartphone,
   Play,
   Clock,
   Heart,
   Send,
-  AlertTriangle
+  AlertTriangle,
+ 
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { motion, AnimatePresence } from 'motion/react';
@@ -974,13 +975,13 @@ export const LandingView: React.FC = () => {
 
           <div className="flex items-center gap-4 text-zinc-500">
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              <Github className="w-4 h-4" />
+              <GitBranch className="w-4 h-4" />
             </a>
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              <Twitter className="w-4 h-4" />
+              <Globe className="w-4 h-4" />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              <Linkedin className="w-4 h-4" />
+              <Users className="w-4 h-4" />
             </a>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Share2, ShieldCheck, Copy, Linkedin, Twitter, Download, FileDown, Sparkles } from 'lucide-react';
+import { Share2, ShieldCheck, Copy, Users, Globe, Download, FileDown, Sparkles } from 'lucide-react';
 import { useUiStore } from '../../store/ui.store';
 import { Button } from '../../components/ui/Button';
 
@@ -106,7 +106,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             disabled={sharingAction !== null}
             className="text-[11px] justify-start gap-2 bg-white/[0.01] hover:bg-white/[0.04] transition-all"
           >
-            <Linkedin className="w-3.5 h-3.5 text-blue-400" /> LinkedIn
+            <Users className="w-3.5 h-3.5 text-blue-400" /> LinkedIn
           </Button>
 
           <Button
@@ -115,7 +115,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             disabled={sharingAction !== null}
             className="text-[11px] justify-start gap-2 bg-white/[0.01] hover:bg-white/[0.04] transition-all"
           >
-            <Twitter className="w-3.5 h-3.5 text-sky-400" /> Twitter/X
+            <Globe className="w-3.5 h-3.5 text-sky-400" /> Twitter/X
           </Button>
 
           <Button

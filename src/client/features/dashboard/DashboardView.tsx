@@ -32,6 +32,7 @@ import { formatEffort } from '../../utils/time';
 export const DashboardView: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  console.log("AUTH USER:", user);
   const { addToast } = useUiStore();
   const { linkTask, startTimer, setTimeRemaining } = useFocusStore();
   const { triggerPanic } = usePanicStore();
@@ -94,12 +95,21 @@ export const DashboardView: React.FC = () => {
 
   // Helper to extract first name from email cleanly
   const getFirstName = () => {
-    if (!user || !user.email) return 'Developer';
-    const localPart = user.email.split('@')[0];
-    const cleaned = localPart.replace(/[0-9_\-\.]/g, '');
-    if (!cleaned) return 'Developer';
+  if (user?.fullName?.trim()) {
+    return user.fullName;
+  }
+
+  if (user?.email) {
+    const localPart = user.email.split("@")[0];
+    const cleaned = localPart.replace(/[0-9_.-]/g, "");
+
+    if (!cleaned) return "Developer";
+
     return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
-  };
+  }
+
+  return "Developer";
+};
 
   // Sum of estimated focus minutes for active tasks
   const totalActiveMinutes = activeTasks.reduce((acc, t) => acc + (t.estimatedTime || 0), 0);

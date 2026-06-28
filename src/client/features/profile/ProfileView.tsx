@@ -775,7 +775,7 @@ export const ProfileView: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
                     <FloatingLabelInput
                       label="Email Address (Locked)"
-                      value={user?.email || "mahakseth82@gmail.com"}
+                      value={user?.email || "user@example.com"}
                       disabled
                     />
                     <FloatingLabelInput

@@ -23,6 +23,8 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Dialog } from '../../components/ui/Dialog';
 import { motion, AnimatePresence } from 'motion/react';
+import { AuthService } from "../../services/auth.service";
+import { FirestoreService } from "../../services/firestore.service";
 import { useUiStore } from '../../store/ui.store';
 import { useAuthStore } from '../../store/auth.store';
 import { useFocusStore } from '../../store/focus.store';
@@ -51,7 +53,9 @@ export const SettingsView: React.FC = () => {
   // =====================================
 
   // Section 1: Account
-  const [username, setUsername] = useState(() => localStorage.getItem('dz-username') || user?.email?.split('@')[0] || 'mahakseth82');
+  const [username, setUsername] = useState(
+  () => user?.fullName || user?.email?.split("@")[0] || ""
+);
   const [email, setEmail] = useState(() => user?.email || 'mahakseth82@gmail.com');
   const [avatar, setAvatar] = useState(() => user?.avatar || AVATAR_PRESETS[0]);
   const [occupation, setOccupation] = useState(() => user?.occupation || 'Student / Freelancer');
@@ -110,7 +114,15 @@ export const SettingsView: React.FC = () => {
   const [autoStartNextSession] = useState(() => JSON.parse(localStorage.getItem('dz-focus-autostart-next') || 'false'));
   const [playAmbientAuto] = useState(() => JSON.parse(localStorage.getItem('dz-focus-ambient-auto') || 'true'));
   const [enableFullscreen] = useState(() => JSON.parse(localStorage.getItem('dz-focus-fullscreen') || 'false'));
-
+useEffect(() => {
+  if (user) {
+    setUsername(user.fullName || "");
+    setEmail(user.email || "");
+    setAvatar(user.avatar || AVATAR_PRESETS[0]);
+    setOccupation(user.occupation || "");
+    setBio(user.bio || "");
+  }
+}, [user]);
   // Theme Sync on change
   useEffect(() => {
     if (activeTheme === 'dark' || activeTheme === 'system') {
@@ -138,7 +150,7 @@ export const SettingsView: React.FC = () => {
   // =====================================
 
   const handleCancelChanges = () => {
-    setUsername(localStorage.getItem('dz-username') || user?.email?.split('@')[0] || 'mahakseth82');
+    setUsername(user?.fullName || "");
     setEmail(user?.email || 'mahakseth82@gmail.com');
     setAvatar(user?.avatar || AVATAR_PRESETS[0]);
     setOccupation(user?.occupation || 'Student / Freelancer');
@@ -153,8 +165,7 @@ export const SettingsView: React.FC = () => {
   };
 
   const handleResetDefaults = () => {
-    setUsername(user?.email?.split('@')[0] || 'mahakseth82');
-    setEmail('mahakseth82@gmail.com');
+    setUsername(user?.fullName || "");
     setAvatar(AVATAR_PRESETS[0]);
     setOccupation('Student / Freelancer');
     setBio('Computer Science student and freelance web developer.');
@@ -167,16 +178,26 @@ export const SettingsView: React.FC = () => {
     addToast('Defaults loaded', 'Staged defaults. Click Save changes to apply.', 'warning');
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async() => {
+    
     try {
+      await AuthService.updateDisplayName(username);
+      await FirestoreService.updateUserProfile(user!.userId, {
+  name: username,
+  email,
+  avatar,
+  bio,
+  occupation,
+});
       updateProfile({
+         fullName: username, 
         email,
         avatar,
         bio,
         occupation
       });
 
-      localStorage.setItem('dz-username', username);
+      
       localStorage.setItem('dz-active-theme', activeTheme);
       localStorage.setItem('dz-accent-color', accentColor);
       localStorage.setItem('dz-font-size', fontSize);
@@ -205,9 +226,15 @@ export const SettingsView: React.FC = () => {
 
       setIsEditProfileMode(false);
       addToast('Workspace updated', 'Settings successfully integrated and saved.', 'success');
-    } catch (err) {
-      addToast('Error saving settings', 'Changes could not be saved locally.', 'error');
-    }
+    } catch (err: any) {
+  console.error("SAVE ERROR:", err);
+
+  addToast(
+    "Error",
+    err.message || "Unknown error",
+    "error"
+  );
+}
   };
 
   const handleUpdatePasswordSubmit = (e: React.FormEvent) => {

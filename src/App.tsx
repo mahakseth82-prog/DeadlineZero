@@ -22,6 +22,7 @@ import { AiCoachView } from './client/features/coach/AiCoachView';
 import { AnalyticsView } from './client/features/analytics/AnalyticsView';
 import { ProfileView } from './client/features/profile/ProfileView';
 import { SettingsView } from './client/features/settings/SettingsView';
+import AuthInitializer from "./client/components/AuthInitializer";
 
 // Protected Route Guard
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -37,6 +38,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 export default function App() {
   return (
     <BrowserRouter>
+      <AuthInitializer />
       <Routes>
         {/* Public Marketing Routes */}
         <Route path="/" element={<LandingView />} />

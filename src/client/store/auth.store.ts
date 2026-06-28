@@ -8,6 +8,8 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { UserProfile } from '../../types';
 import { safeLocalStorage } from '../utils/storage';
 import { AuthService } from "../services/auth.service";
+import { useTaskStore } from "./task.store";
+import { FirestoreService } from "../services/firestore.service";
 
 interface AuthState {
   accessToken: string | null;
@@ -21,7 +23,7 @@ signup: (
   password: string
 ) => Promise<boolean>;
 googleLogin: () => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateProfile: (profile: Partial<UserProfile>) => void;
   setOnboarded: (status: boolean) => void;
 }
@@ -29,6 +31,7 @@ googleLogin: () => Promise<boolean>;
 const DEFAULT_MOCK_PROFILE: UserProfile = {
   id: 'usr-928374',
   userId: 'usr-928374',
+   fullName: '',
   email: 'mahakseth82@gmail.com',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&h=256&fit=crop',
   bio: 'Computer Science student and freelance web developer.',
@@ -52,23 +55,54 @@ isAuthenticated: false,
 isOnboarded: false,
      login: async (email: string, password: string) => {
   try {
-    const firebaseUser = await AuthService.login(email, password);
+      const firebaseUser = await AuthService.login(
+      email,
+      password
+    );
 
-    set({
-      accessToken: await firebaseUser.getIdToken(),
-      user: {
-        ...DEFAULT_MOCK_PROFILE,
-        id: firebaseUser.uid,
-        userId: firebaseUser.uid,
-        email: firebaseUser.email ?? email,
-      },
-      isAuthenticated: true,
-    });
+const profile = await FirestoreService.getUserProfile(
+  firebaseUser.uid
+);
 
+set({
+  accessToken: await firebaseUser.getIdToken(),
+
+  user: {
+    ...DEFAULT_MOCK_PROFILE,
+
+    id: firebaseUser.uid,
+    userId: firebaseUser.uid,
+
+    fullName:
+      profile?.name ??
+      firebaseUser.displayName ??
+      "",
+
+    email:
+      profile?.email ??
+      firebaseUser.email ??
+      "",
+
+    occupation:
+      profile?.occupation ??
+      DEFAULT_MOCK_PROFILE.occupation,
+
+    bio:
+      profile?.bio ??
+      DEFAULT_MOCK_PROFILE.bio,
+
+    avatar:
+      profile?.avatar ??
+      DEFAULT_MOCK_PROFILE.avatar,
+  },
+
+  isAuthenticated: true,
+});
+ await useTaskStore.getState().loadTasks(firebaseUser.uid);
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return false;
+    throw error;
   }
 },
 
@@ -83,13 +117,18 @@ isOnboarded: false,
       email,
       password
     );
-
+await FirestoreService.createUserProfile({
+  uid: firebaseUser.uid,
+  name: fullName,
+  email: firebaseUser.email ?? email,
+});
     set({
       accessToken: await firebaseUser.getIdToken(),
       user: {
         ...DEFAULT_MOCK_PROFILE,
         id: firebaseUser.uid,
         userId: firebaseUser.uid,
+        fullName: fullName,
         email: firebaseUser.email ?? email,
         currentStreak: 0,
         longestStreak: 0,
@@ -99,42 +138,73 @@ isOnboarded: false,
       isAuthenticated: true,
       isOnboarded: false,
     });
-
+await useTaskStore.getState().loadTasks(firebaseUser.uid)
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return false;
+    throw error;
   }
 },
 googleLogin: async () => {
   try {
-    const firebaseUser = await AuthService.googleLogin();
+   const firebaseUser = await AuthService.googleLogin();
+const profile = await FirestoreService.getUserProfile(
+  firebaseUser.uid
+);
 
-    set({
-      accessToken: await firebaseUser.getIdToken(),
-      user: {
-        ...DEFAULT_MOCK_PROFILE,
-        id: firebaseUser.uid,
-        userId: firebaseUser.uid,
-        email: firebaseUser.email ?? "",
-      },
-      isAuthenticated: true,
-    });
+set({
+  accessToken: await firebaseUser.getIdToken(),
 
+  user: {
+    ...DEFAULT_MOCK_PROFILE,
+
+    id: firebaseUser.uid,
+    userId: firebaseUser.uid,
+
+    fullName:
+      profile?.name ??
+      firebaseUser.displayName ??
+      "",
+
+    email:
+      profile?.email ??
+      firebaseUser.email ??
+      "",
+
+    occupation:
+      profile?.occupation ??
+      DEFAULT_MOCK_PROFILE.occupation,
+
+    bio:
+      profile?.bio ??
+      DEFAULT_MOCK_PROFILE.bio,
+
+    avatar:
+      profile?.avatar ??
+      DEFAULT_MOCK_PROFILE.avatar,
+  },
+
+  isAuthenticated: true,
+});
+await useTaskStore.getState().loadTasks(firebaseUser.uid);
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return false;
+    throw error;
   }
-},
-      logout: () => {
-        set({
-          accessToken: null,
-          user: null,
-          isAuthenticated: false,
-        });
-      },
+},logout: async () => {
+  await AuthService.logout();
 
+  useTaskStore.setState({
+    tasks: [],
+  });
+
+  set({
+    accessToken: null,
+    user: null,
+    isAuthenticated: false,
+  });
+},
       updateProfile: (profileUpdates) => {
         set((state) => ({
           user: state.user ? { ...state.user, ...profileUpdates } : null,

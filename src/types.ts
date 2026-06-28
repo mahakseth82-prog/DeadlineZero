@@ -33,6 +33,7 @@ export enum RiskLevel {
 export interface UserProfile {
   id: string;
   userId: string;
+  fullName: string;
   email: string;
   avatar?: string;
   bio?: string;

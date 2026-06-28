@@ -38,7 +38,7 @@ export const useUiStore = create<UiState>()(
   persist(
     (set) => ({
       sidebarCollapsed: false,
-      themeMode: 'light', // Default to clean, elegant off-white / charcoal crisp slate theme
+      themeMode: 'dark', // Default to clean, elegant off-white / charcoal crisp slate theme
       toasts: [],
       soundEnabled: true,
       digestEnabled: true,

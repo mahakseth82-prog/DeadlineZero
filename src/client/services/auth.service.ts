@@ -6,8 +6,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+
 import { FirestoreService } from "./firestore.service";
 import { auth } from "../../lib/firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 export const AuthService = {
   async signup(fullName: string, email: string, password: string) {
@@ -37,7 +39,13 @@ await FirestoreService.createUserProfile({
 
     return result.user;
   },
+async updateDisplayName(fullName: string) {
+  if (!auth.currentUser) return;
 
+  await updateProfile(auth.currentUser, {
+    displayName: fullName,
+  });
+},
   async googleLogin() {
     const provider = new GoogleAuthProvider();
 
@@ -52,4 +60,7 @@ await FirestoreService.createUserProfile({
   async logout() {
     await signOut(auth);
   },
+  async resetPassword(email: string) {
+  await sendPasswordResetEmail(auth, email);
+}
 };

@@ -8,6 +8,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { safeLocalStorage } from '../utils/storage';
 import { Task, TaskPriority, TaskStatus, Category, Subtask, RiskLevel } from '../../types';
 import { calculateTaskRisk, TriageOutput } from '../utils/triage';
+import { TaskService } from "../services/TaskService";
 
 // Seed categories
 const INITIAL_CATEGORIES: Category[] = [
@@ -196,6 +197,7 @@ interface TaskState {
     estimatedTime: number;
     categoryId?: string;
     notes?: string;
+    userId: string;
     subtasks?: Subtask[];
     difficultyScore?: number;
     energyRequirement?: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -204,10 +206,10 @@ interface TaskState {
     pomodoroCycles?: number;
     tags?: string[];
     isArchived?: boolean;
-  }) => void;
-  updateTask: (taskId: string, updates: Partial<Task>) => void;
+  }) =>Promise<void>;
+  updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: string) => void;
-  
+  loadTasks: (userId: string) => Promise<void>;
   // Subtasks actions
   toggleSubtask: (taskId: string, subtaskId: string) => void;
   addSubtask: (taskId: string, title: string) => void;
@@ -230,11 +232,22 @@ interface TaskState {
 export const useTaskStore = create<TaskState>()(
   persist(
     (set, get) => ({
+      loadTasks: async (userId: string) => {
+  try {
+    const tasks = await TaskService.getUserTasks(userId);
+
+    set({
+      tasks,
+    });
+  } catch (error) {
+    console.error("Failed to load tasks:", error);
+  }
+},
       tasks: [],
       categories: INITIAL_CATEGORIES,
       schedules: INITIAL_SCHEDULES,
 
-  addTask: (taskData) => {
+  addTask:async (taskData) => {
     const category = INITIAL_CATEGORIES.find((c) => c.id === taskData.categoryId);
     const taskId = `t-${Date.now()}`;
     const calculatedDifficulty = taskData.difficultyScore ?? (
@@ -253,7 +266,7 @@ export const useTaskStore = create<TaskState>()(
 
     const newTask: Task = {
       id: taskId,
-      userId: 'usr-928374',
+    userId: taskData.userId,
       title: taskData.title,
       description: taskData.description,
       deadline: taskData.deadline,
@@ -274,13 +287,14 @@ export const useTaskStore = create<TaskState>()(
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-
+await TaskService.createTask(newTask);
     set((state) => ({
       tasks: [newTask, ...state.tasks],
     }));
   },
 
-  updateTask: (taskId, updates) => {
+  updateTask:async (taskId, updates) => {
+    await TaskService.updateTask(taskId, updates);
     set((state) => {
       const updatedTasks = state.tasks.map((task) => {
         if (task.id === taskId) {
@@ -581,7 +595,15 @@ export const useTaskStore = create<TaskState>()(
   name: 'deadlinezero-tasks',
   version: 1,
   storage: createJSONStorage(() => safeLocalStorage),
-  migrate: (persistedState: any, version: number) => {
+
+  partialize: (state) => ({
+    categories: state.categories,
+    schedules: state.schedules,
+  }),
+
+  migrate: (persistedState: any) => {
     return persistedState;
   },
-}));
+}
+  )
+);

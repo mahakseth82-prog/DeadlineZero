@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuthStore } from "../../store/auth.store";
+import { speechService } from "../../utils/speech";
 import { 
   Bot, 
   Calendar, 
@@ -44,7 +46,7 @@ import { TaskDetailsDrawer } from './TaskDetailsDrawer';
 
 export const TaskManagementView: React.FC = () => {
   const { addToast } = useUiStore();
-  
+  const { user } = useAuthStore();
   // Store actions and states
   const { 
     tasks, 
@@ -59,7 +61,7 @@ export const TaskManagementView: React.FC = () => {
   } = useTaskStore();
 
   // Layout states
-  const [viewMode, setViewMode] = useState<'list' | 'kanban' | 'timeline' | 'compact'>('kanban');
+  const [viewMode, setViewMode] = useState<'list' | 'kanban' | 'timeline' | 'compact'>('list');
   const [taskMousePos, setTaskMousePos] = useState({ x: 0, y: 0 });
   const handleTaskMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -98,6 +100,7 @@ export const TaskManagementView: React.FC = () => {
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
+  const [isListening, setIsListening] = useState(false);
   const [newNotes, setNewNotes] = useState('');
   const [newDeadline, setNewDeadline] = useState('');
   const [newPriority, setNewPriority] = useState<TaskPriority>(TaskPriority.MEDIUM);
@@ -172,9 +175,12 @@ export const TaskManagementView: React.FC = () => {
     }
 
     // 2. Category multi-select
-    if (selectedCategories.length > 0 && !selectedCategories.includes(task.categoryId)) {
-      return false;
-    }
+    if (
+  selectedCategories.length > 0 &&
+  !selectedCategories.includes(task.categoryId ?? "")
+) {
+  return false;
+}
 
     // 3. Priority multi-select
     if (selectedPriorities.length > 0 && !selectedPriorities.includes(task.priority)) {
@@ -358,10 +364,11 @@ export const TaskManagementView: React.FC = () => {
       addToast('Milestone Configured', 'Task parameters updated successfully.', 'success');
     } else {
       addTask({
-        ...taskFields,
-        status: TaskStatus.TODO,
-        subtasks: tempSubtasks
-      });
+  ...taskFields,
+  status: TaskStatus.TODO,
+  subtasks: tempSubtasks,
+  userId: user?.id ?? "",
+});
       addToast('Objective Logged', 'Proactive milestone successfully injected into pipeline.', 'success');
     }
 
@@ -377,7 +384,31 @@ export const TaskManagementView: React.FC = () => {
     setNewProject('');
     setTempSubtasks([]);
   };
+const handleVoiceInput = async () => {
+  try {
+    setIsListening(true);
 
+    const transcript = await speechService.startListening();
+
+    setNewTitle(transcript);
+
+    addToast(
+      "Voice Captured",
+      "Speech converted successfully.",
+      "success"
+    );
+  } catch (error) {
+    console.error(error);
+
+    addToast(
+      "Voice Error",
+      "Unable to recognize speech.",
+      "error"
+    );
+  } finally {
+    setIsListening(false);
+  }
+};
   // Triggering Edit Mode
   const handleStartEdit = (task: Task, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -403,7 +434,7 @@ export const TaskManagementView: React.FC = () => {
     setNewDifficulty(task.difficultyScore || 5);
     setNewEnergy(task.energyRequirement || 'MEDIUM');
     setNewProject(task.project || '');
-    setNewCatId(task.categoryId);
+   setNewCatId(task.categoryId ?? "");
     setNewEstTime(task.estimatedTime);
     setTempSubtasks(task.subtasks || []);
     setIsCreateDialogOpen(true);
@@ -924,17 +955,33 @@ export const TaskManagementView: React.FC = () => {
           >
             <form onSubmit={handleSaveTask} className="space-y-5 text-zinc-900 dark:text-zinc-100 font-sans">
               <div className="space-y-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Objective Milestones Title</label>
-                  <Input
-                    type="text"
-                    placeholder="e.g. Complete Backend Authentication MVP"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    required
-                    className="text-xs bg-zinc-950 border-zinc-800 text-white"
-                  />
-                </div>
+                <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+  Objective Milestones Title
+</label>
+
+<div className="flex items-center gap-2">
+  <Input
+    type="text"
+    placeholder="e.g. Complete Backend Authentication MVP"
+    value={newTitle}
+    onChange={(e) => setNewTitle(e.target.value)}
+    required
+    className="flex-1 text-xs bg-zinc-950 border-zinc-800 text-white"
+  />
+
+  <button
+  type="button"
+  onClick={handleVoiceInput}
+  disabled={isListening}
+  className={`h-10 px-3 rounded-lg flex items-center gap-2 transition-all ${
+    isListening
+      ? "bg-red-500 animate-pulse text-white"
+      : "bg-violet-600 hover:bg-violet-700 text-white"
+  }`}
+>
+  {isListening ? "🎙️ Listening..." : "🎤 Voice"}
+</button>
+</div>
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Strategic Description</label>
