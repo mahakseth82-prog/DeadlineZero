@@ -19,8 +19,6 @@ import { CalendarView } from './client/features/calendar/CalendarView';
 import { FocusRoomView } from './client/features/focus-room/FocusRoomView';
 import { PanicModeView } from './client/features/panic-mode/PanicModeView';
 import { AiCoachView } from './client/features/coach/AiCoachView';
-import { AnalyticsView } from './client/features/analytics/AnalyticsView';
-import { ProfileView } from './client/features/profile/ProfileView';
 import { SettingsView } from './client/features/settings/SettingsView';
 import AuthInitializer from "./client/components/AuthInitializer";
 
@@ -71,8 +69,6 @@ export default function App() {
           <Route path="focus-room" element={<FocusRoomView />} />
           <Route path="panic-mode" element={<PanicModeView />} />
           <Route path="coach" element={<AiCoachView />} />
-          <Route path="analytics" element={<AnalyticsView />} />
-          <Route path="profile" element={<ProfileView />} />
           <Route path="settings" element={<SettingsView />} />
         </Route>
 

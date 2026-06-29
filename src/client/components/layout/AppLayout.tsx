@@ -55,8 +55,6 @@ export const AppLayout: React.FC = () => {
     { label: 'Focus Room', path: '/app/focus-room', icon: Flame },
     { label: 'Panic Mode', path: '/app/panic-mode', icon: Zap, highlight: isPanicActive },
     { label: 'AI Productivity Coach', path: '/app/coach', icon: Bot },
-    { label: 'Analytics', path: '/app/analytics', icon: BarChart2 },
-    { label: 'Profile', path: '/app/profile', icon: User },
     { label: 'Settings', path: '/app/settings', icon: Settings },
   ];
 
