@@ -1,6 +1,5 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Type } from '@google/genai';
 import dotenv from 'dotenv';
@@ -8,16 +7,14 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  
 
   // Enable JSON request body parsing
   app.use(express.json());
-
+const PORT = Number(process.env.PORT) || 3000;
   // Check and initialize Gemini API Client safely
   let ai: GoogleGenAI | null = null;
   const apiKey = process.env.GEMINI_API_KEY;
