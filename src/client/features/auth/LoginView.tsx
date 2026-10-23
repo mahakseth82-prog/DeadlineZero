@@ -20,7 +20,9 @@ import {
   Sparkles, 
   Zap, 
   ArrowRight,
-  ShieldAlert,X
+  ShieldAlert,
+  X
+} from 'lucide-react';
 import { motion } from 'motion/react';
 import { ChronoCore } from '../../components/futuristic/ChronoCore';
 

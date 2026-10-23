@@ -19,7 +19,9 @@ import {
   AlertCircle, 
   Sparkles, 
   Zap, 
-  ArrowRight,X
+  ArrowRight,
+  X
+} from 'lucide-react';
 import { motion } from 'motion/react';
 import { ChronoCore } from '../../components/futuristic/ChronoCore';
 
