@@ -20,8 +20,8 @@ import {
   Sparkles, 
   Zap, 
   ArrowRight,X
-} from 'lucide-react';
 import { motion } from 'motion/react';
+import { ChronoCore } from '../../components/futuristic/ChronoCore';
 
 // ==========================================
 // FLOATING 3D CHRONO CORE FOR AUTH LEFT PANEL
@@ -355,7 +355,7 @@ if (!success) {
 
           {/* Core Animation Area */}
           <div className="flex-1 flex flex-col items-center justify-center py-6 z-10">
-            <AuthChronoCore />
+            <ChronoCore />
             
             <div className="text-center mt-8 space-y-3 max-w-sm">
               <h2 className="text-2xl font-extrabold tracking-tight text-white font-sans">

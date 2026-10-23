@@ -2,8 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DeadlineZero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>DeadlineZero — Intelligent AI Deadline Coach & Focus Sprint Engine</title>
+    
+    <!-- Meta Descriptions & SEO -->
+    <meta name="description" content="DeadlineZero is an intelligent AI productivity coach powered by Google Gemini that turns deadline panic into structured, high-velocity execution." />
+    <meta name="author" content="Mahak Seth" />
+    
+    <!-- PWA / Mobile Web App Capabilities -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="DeadlineZero" />
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DeadlineZero — Turning Deadline Panic into Intelligent Execution" />
+    <meta property="og:description" content="AI productivity coach powered by Google Gemini: real-time risk triage, Pomodoro ambient focus room, and emergency sprint roadmaps." />
+    <meta property="og:image" content="/assets/screenshots/dashboard.png" />
+
     <script>
       try {
         const uiStore = JSON.parse(localStorage.getItem('deadlinezero-ui'));
@@ -20,4 +39,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
