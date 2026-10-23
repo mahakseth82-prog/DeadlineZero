@@ -8,13 +8,97 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
+interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+  message: string;
+}
+
+class SlidingWindowRateLimiter {
+  private requests: Map<string, number[]> = new Map();
+  private windowMs: number;
+  private maxRequests: number;
+  private message: string;
+
+  constructor(config: RateLimitConfig) {
+    this.windowMs = config.windowMs;
+    this.maxRequests = config.maxRequests;
+    this.message = config.message;
+
+    const cleanupInterval = setInterval(() => {
+      const now = Date.now();
+      for (const [key, timestamps] of this.requests.entries()) {
+        const valid = timestamps.filter(t => now - t < this.windowMs);
+        if (valid.length === 0) {
+          this.requests.delete(key);
+        } else {
+          this.requests.set(key, valid);
+        }
+      }
+    }, 5 * 60 * 1000);
+    if (cleanupInterval.unref) cleanupInterval.unref();
+  }
+
+  middleware() {
+    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const forwarded = req.headers['x-forwarded-for'];
+      const clientIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : req.socket.remoteAddress || '127.0.0.1';
+      const authHeader = req.headers.authorization;
+      const clientKey = authHeader ? `auth:${authHeader.slice(-16)}` : `ip:${clientIp}`;
+
+      const now = Date.now();
+      const timestamps = (this.requests.get(clientKey) || []).filter(t => now - t < this.windowMs);
+
+      const remaining = Math.max(0, this.maxRequests - timestamps.length);
+      const resetTime = Math.ceil((timestamps[0] ? timestamps[0] + this.windowMs - now : this.windowMs) / 1000);
+
+      res.setHeader('X-RateLimit-Limit', this.maxRequests);
+      res.setHeader('X-RateLimit-Remaining', remaining);
+      res.setHeader('X-RateLimit-Reset', resetTime);
+
+      if (timestamps.length >= this.maxRequests) {
+        res.setHeader('Retry-After', resetTime);
+        return res.status(429).json({
+          error: this.message,
+          code: 'RATE_LIMIT_EXCEEDED',
+          retryAfterSeconds: resetTime
+        });
+      }
+
+      timestamps.push(now);
+      this.requests.set(clientKey, timestamps);
+      next();
+    };
+  }
+}
+
 async function startServer() {
   const app = express();
-  
+  const PORT = Number(process.env.PORT) || 3000;
 
-  // Enable JSON request body parsing
-  app.use(express.json());
-const PORT = Number(process.env.PORT) || 3000;
+  // Security Headers
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+  });
+
+  // Enable JSON request body parsing with bounded payload size
+  app.use(express.json({ limit: '1mb' }));
+
+  // API Latency & Audit Logging
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+      if (req.path.startsWith('/api')) {
+        const ms = Date.now() - start;
+        console.log(`[API] ${req.method} ${req.path} -> ${res.statusCode} (${ms}ms)`);
+      }
+    });
+    next();
+  });
+
   // Check and initialize Gemini API Client safely
   let ai: GoogleGenAI | null = null;
   const apiKey = process.env.GEMINI_API_KEY;
@@ -32,9 +116,17 @@ const PORT = Number(process.env.PORT) || 3000;
     console.warn('WARNING: GEMINI_API_KEY is not defined in the environment.');
   }
 
+  // Rate Limiting on AI Endpoints: 30 requests per minute per client
+  const aiLimiter = new SlidingWindowRateLimiter({
+    windowMs: 60 * 1000,
+    maxRequests: 30,
+    message: 'AI rate limit exceeded. Please wait a moment before sending more queries.',
+  });
+  app.use('/api/ai', aiLimiter.middleware());
+
   // API Health check endpoint
   app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', apiInitialized: !!ai });
+    res.json({ status: 'ok', apiInitialized: !!ai, timestamp: new Date().toISOString() });
   });
 
   // POST /api/ai/coach
@@ -48,8 +140,12 @@ const PORT = Number(process.env.PORT) || 3000;
 
       const { prompt, tasks = [], focusStats = {}, panicLogs = [] } = req.body;
 
-      if (!prompt) {
-        return res.status(400).json({ error: 'A prompt is required.' });
+      if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
+        return res.status(400).json({ error: 'A valid text prompt is required.' });
+      }
+
+      if (prompt.length > 3000) {
+        return res.status(400).json({ error: 'Prompt exceeds maximum allowable length of 3000 characters.' });
       }
 
       // Format current timestamp for temporal context
@@ -278,8 +374,12 @@ Always return a structured JSON response matching the requested schema. Ensure t
   app.post('/api/ai/task-breakdown', async (req, res) => {
     try {
       const { taskTitle, taskDescription = '' } = req.body;
-      if (!taskTitle) {
-        return res.status(400).json({ error: 'Task title is required.' });
+      if (!taskTitle || typeof taskTitle !== 'string' || !taskTitle.trim()) {
+        return res.status(400).json({ error: 'A valid task title string is required.' });
+      }
+
+      if (taskTitle.length > 250) {
+        return res.status(400).json({ error: 'Task title exceeds maximum allowable length of 250 characters.' });
       }
 
       if (!ai) {
@@ -341,8 +441,12 @@ Always return a structured JSON response matching the requested schema. Ensure t
   app.post('/api/ai/voice-parse', async (req, res) => {
     try {
       const { voiceText } = req.body;
-      if (!voiceText) {
-        return res.status(400).json({ error: 'voiceText is required.' });
+      if (!voiceText || typeof voiceText !== 'string' || !voiceText.trim()) {
+        return res.status(400).json({ error: 'A valid voiceText string is required.' });
+      }
+
+      if (voiceText.length > 1000) {
+        return res.status(400).json({ error: 'Voice command exceeds maximum allowable length of 1000 characters.' });
       }
 
       const currentTimestamp = new Date().toISOString();
