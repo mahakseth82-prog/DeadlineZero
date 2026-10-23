@@ -113,7 +113,9 @@ async function startServer() {
       },
     });
   } else {
-    console.warn('WARNING: GEMINI_API_KEY is not defined in the environment.');
+    console.warn('⚠️  GEMINI_API_KEY is not defined in .env.');
+    console.warn('   AI endpoints will use local heuristic fallbacks.');
+    console.warn('   (To activate live Google Gemini 2.5 Flash, add GEMINI_API_KEY in your .env file)\n');
   }
 
   // Rate Limiting on AI Endpoints: 30 requests per minute per client
@@ -542,6 +544,9 @@ Always return a structured JSON response matching the requested schema. Ensure t
   }
 
   app.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n🚀 DeadlineZero dev server running at:`);
+    console.log(`   > Local:   http://localhost:${PORT}`);
+    console.log(`   > Network: http://0.0.0.0:${PORT}\n`);
   });
 }
 
