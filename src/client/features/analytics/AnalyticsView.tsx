@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { AnalyticsGlobe } from '../../components/futuristic/AnalyticsGlobe';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaskStore } from '../../store/task.store';
 import { useFocusStore } from '../../store/focus.store';
@@ -1008,6 +1009,48 @@ export const AnalyticsView: React.FC = () => {
         </div>
 
       </div>
+
+      {/* ==========================================
+          6. DISTRIBUTED FOCUS TELEMETRY & SYNC
+          ========================================== */}
+      <Card className="relative overflow-hidden bg-gradient-to-r from-zinc-900/40 via-blue-950/20 to-zinc-900/40 border-white/[0.04] p-6 text-left">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="space-y-4 max-w-xl">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-cyan-400" />
+              <span className="text-[10px] font-mono font-bold tracking-widest text-cyan-400 uppercase">
+                Global Focus Telemetry
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                Distributed Productivity & Focus Mesh
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed font-light mt-1">
+                Real-time spatial visualization of active study intervals, multi-zone synchronization, and cognitive endurance nodes across your scheduled timelines.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+              <div className="p-3 rounded-xl bg-zinc-900/60 border border-white/[0.04]">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase block">Telemetry Node</span>
+                <span className="text-xs font-mono font-bold text-white">Asia-South1</span>
+              </div>
+              <div className="p-3 rounded-xl bg-zinc-900/60 border border-white/[0.04]">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase block">Model Inference</span>
+                <span className="text-xs font-mono font-bold text-emerald-400">~140ms Flash</span>
+              </div>
+              <div className="p-3 rounded-xl bg-zinc-900/60 border border-white/[0.04]">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase block">Sync Integrity</span>
+                <span className="text-xs font-mono font-bold text-blue-400">100% Secure</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center relative cursor-grab active:cursor-grabbing">
+            <AnalyticsGlobe size={240} />
+            <span className="text-[9px] font-mono text-zinc-500 mt-1">Interactive 3D Mesh • Drag to rotate</span>
+          </div>
+        </div>
+      </Card>
 
     </motion.div>
   );

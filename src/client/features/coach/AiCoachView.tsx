@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
+import { AiAssistantOrb } from '../../components/futuristic/AiAssistantOrb';
 import { motion, AnimatePresence } from 'motion/react';
 import { useUiStore } from '../../store/ui.store';
 import { useTaskStore } from '../../store/task.store';
@@ -1090,6 +1091,31 @@ const handleVoiceInput = async () => {
         {/* LEFT COLUMN: Suggested Actions, Workspace Metrics, Heuristics */}
         <div className="lg:col-span-5 flex flex-col gap-8">
           
+          {/* Neural Presence Orb Card */}
+          <Card className="relative overflow-hidden bg-gradient-to-b from-blue-950/20 via-zinc-900/40 to-zinc-900/30 border-blue-500/15 p-4 flex flex-col items-center text-center group shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
+            <div className="w-full flex items-center justify-between pb-1 border-b border-white/[0.04]">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
+                </span>
+                <span className="text-[9px] font-mono font-bold tracking-widest text-cyan-400 uppercase">
+                  Neural Core Active
+                </span>
+              </div>
+              <span className="text-[9px] font-mono text-zinc-500 font-semibold">Gemini 2.5 Flash</span>
+            </div>
+            <div className="my-1 cursor-grab active:cursor-grabbing">
+              <AiAssistantOrb size={170} interactive={true} />
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-bold text-white tracking-wide">Chrono AI Assistant Core</p>
+              <p className="text-[10px] text-zinc-400 font-light max-w-xs leading-relaxed">
+                Interactive real-time neural visualizer. Drag or hover to explore 3D particle state.
+              </p>
+            </div>
+          </Card>
+
           {/* A. Suggested Actions */}
           <div className="space-y-4 text-left">
             <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest block">
