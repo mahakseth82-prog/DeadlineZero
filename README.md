@@ -12,25 +12,21 @@
 
 **Built for the Google Hackathon — "The Last-Minute Life Saver" track**
 
-**[🌐 Try the Live App](https://deadlinezero-9197800550.asia-south1.run.app)** &nbsp;·&nbsp; **[📂 GitHub Repo](#)** &nbsp;·&nbsp; **[🎥 Demo Video](<a href="https://youtu.be/Qgg8KPE-ylc" target="_blank">
-  <img src="assets/screenshots/dashboard.png" width="800" alt="Watch Demo">
-</a>)**
+**[🌐 Try the Live App](https://deadlinezero-9197800550.asia-south1.run.app)** &nbsp;·&nbsp; **[📂 GitHub Repo](#)** &nbsp;·&nbsp; **[🎥 Demo Video](https://youtu.be/Qgg8KPE-ylc)**
 
 </div>
 
 <br>
 
 <!--
-  📸 ADD SCREENSHOTS / DEMO GIF HERE — this is the single highest-impact section for judges.
-  Recommended: 1 hero GIF (15-20s) showing AI Coach + Task Breakdown in action,
-  or 3 screenshots: Dashboard | AI Coach | Voice Task Parsing
+  📸 SCREENSHOTS / DEMO PREVIEW
 -->
 <div align="center">
   <table>
     <tr>
-     <td><img src="assets/screenshots/dashboard.png" width="260" alt="Dashboard"></td>
-<td><img src="assets/screenshots/ai-coach.png" width="260" alt="AI Coach"></td>
-<td><img src="assets/screenshots/task.png" width="260" alt="Task Section"></td>
+      <td><img src="assets/screenshots/dashboard.png" width="260" alt="Dashboard"></td>
+      <td><img src="assets/screenshots/ai-coach.png" width="260" alt="AI Coach"></td>
+      <td><img src="assets/screenshots/task.png" width="260" alt="Task Section"></td>
     </tr>
     <tr>
       <td align="center"><sub>Dashboard</sub></td>
