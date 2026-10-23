@@ -19,14 +19,14 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const styles = {
-    default: 'bg-white/80 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-250/50 dark:border-zinc-800/60 shadow-lg shadow-zinc-950/5 dark:shadow-zinc-950/20 rounded-2xl p-6',
-    outline: 'border border-zinc-250/50 dark:border-zinc-800/60 rounded-2xl p-6',
-    panic: 'bg-red-50/60 border border-red-150/60 shadow-lg shadow-red-950/5 dark:shadow-red-950/20 rounded-2xl p-6 dark:bg-red-950/20 dark:border-red-900/30 animate-pulse',
-    ambient: 'bg-zinc-50/60 dark:bg-zinc-900/35 backdrop-blur-md border border-zinc-250/40 dark:border-zinc-800/60 shadow-inner rounded-2xl p-6',
+    default: 'bg-white/90 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] rounded-2xl p-6 transition-all',
+    outline: 'border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6',
+    panic: 'bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 shadow-lg rounded-2xl p-6',
+    ambient: 'bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-6',
   };
 
   const interactiveStyle = interactive 
-    ? 'transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-violet-500 dark:hover:border-violet-500 cursor-pointer' 
+    ? 'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-indigo-500/40 dark:hover:border-indigo-500/40 cursor-pointer' 
     : '';
 
   return (

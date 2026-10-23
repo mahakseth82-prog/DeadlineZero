@@ -843,25 +843,27 @@ export const AnalyticsView: React.FC = () => {
       {/* ==========================================
           1. HERO SECTION & HEADER
           ========================================== */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/[0.04] pb-6">
-        <div className="text-left space-y-1.5">
-          <div className="flex items-center gap-2">
-            <BarChart2 className="w-5 h-5 text-blue-400" />
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Analytics
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200/80 dark:border-slate-800/80 pb-6">
+        <div className="text-left space-y-1">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <BarChart2 className="w-4 h-4" />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Analytics & Telemetry
             </h1>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-400 max-w-xl font-light">
-            Monitor your productivity trend, completed sessions, and focus metrics.
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-normal">
+            Track your focus velocity, completed sprints, and milestone delivery analytics.
           </p>
         </div>
 
-        {/* Slow breathing pulse indicator */}
-        <div className="flex items-center gap-2 bg-zinc-900/40 border border-white/[0.04] px-4 py-2 rounded-2xl self-start shadow-md backdrop-blur-md">
+        {/* Status indicator */}
+        <div className="flex items-center gap-2 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 px-3.5 py-2 rounded-2xl self-start shadow-xs backdrop-blur-xl">
           <span className="relative flex h-2 w-2">
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span className="text-[10px] font-mono font-bold text-zinc-300">Analytics Updated</span>
+          <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Telemetry Live</span>
         </div>
       </div>
 
@@ -870,21 +872,20 @@ export const AnalyticsView: React.FC = () => {
           ========================================== */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Tasks Completed", value: completedCount, suffix: ` / ${totalTasksCount}`, trend: "Total tasks", color: "text-blue-400" },
-          { label: "Completion Rate", value: completionRate, suffix: "%", trend: "Successful outcomes", color: "text-emerald-400" },
-          { label: "Focus Time", value: parseFloat(focusHours), suffix: " hrs", trend: "Total hours logged", color: "text-cyan-400" },
-          { label: "Current Streak", value: activeStreak, suffix: " Days", trend: "Streak Active", color: "text-pink-400" }
+          { label: "Tasks Completed", value: completedCount, suffix: ` / ${totalTasksCount}`, trend: "Total deliverable objectives", color: "text-indigo-600 dark:text-indigo-400" },
+          { label: "Completion Rate", value: completionRate, suffix: "%", trend: "Successful task outcomes", color: "text-emerald-600 dark:text-emerald-400" },
+          { label: "Focus Hours", value: parseFloat(focusHours), suffix: " hrs", trend: "Deep work intervals logged", color: "text-sky-600 dark:text-sky-400" },
+          { label: "Active Streak", value: activeStreak, suffix: " Days", trend: "Continuous daily momentum", color: "text-amber-600 dark:text-amber-400" }
         ].map((item, idx) => (
-          <Card key={idx} className="relative overflow-hidden bg-zinc-900/30 border-white/[0.04] p-5 text-left group hover:border-white/[0.08] transition-all">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-white/[0.01] rounded-bl-full pointer-events-none group-hover:bg-white/[0.02] transition-colors" />
-            <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider font-bold">{item.label}</p>
+          <Card key={idx} className="relative overflow-hidden bg-white/70 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800/80 p-5 text-left group hover:border-indigo-500/30 transition-all shadow-xs">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{item.label}</p>
             <div className="flex items-baseline gap-2 mt-2">
-              <h3 className={`text-2xl sm:text-3xl font-black tracking-tight ${item.color}`}>
+              <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight ${item.color}`}>
                 <AnimatedNumber value={item.value} suffix={item.suffix} />
               </h3>
             </div>
-            <div className="flex items-center gap-1.5 mt-1 text-[9px] font-mono text-zinc-400">
-              <span className="w-1 h-1 bg-zinc-500 rounded-full" />
+            <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-400">
+              <span className="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full" />
               <span>{item.trend}</span>
             </div>
           </Card>
@@ -899,10 +900,10 @@ export const AnalyticsView: React.FC = () => {
         <TimelineChart />
 
         {/* Heatmap Card (Col 3) */}
-        <Card className="flex flex-col justify-between space-y-4 bg-zinc-900/30 border-white/[0.04]">
-          <div className="border-b border-white/[0.04] pb-3">
-            <h3 className="font-bold text-sm text-zinc-200 flex items-center gap-2 text-left">
-              <Calendar className="w-4 h-4 text-cyan-400" /> Focus Grid Intensity
+        <Card className="flex flex-col justify-between space-y-4 bg-white/70 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800/80">
+          <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3">
+            <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100 flex items-center gap-2 text-left">
+              <Calendar className="w-4 h-4 text-sky-500" /> Focus Grid Intensity
             </h3>
           </div>
           <div className="flex-grow flex items-center justify-center">

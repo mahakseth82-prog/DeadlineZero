@@ -23,7 +23,8 @@ import {
   Volume2,
   ListCollapse,
   Layers,
-  HelpCircle
+  HelpCircle,
+  CheckSquare
 } from 'lucide-react';
 
 import { useTaskStore, getTaskProgress } from '../../store/task.store';
@@ -601,29 +602,32 @@ export const TaskManagementView: React.FC = () => {
       className="space-y-6 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-12 relative"
     >
       
-      {/* 1. PREMIUM INTUITIVE HEADER */}
-      <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-zinc-950/20 p-5 rounded-2xl border border-zinc-200/10 dark:border-zinc-800/60 relative overflow-hidden">
+      {/* 1. PROFESSIONAL SAAS HEADER */}
+      <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-white/70 dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl shadow-xs relative overflow-hidden">
         
-        <div className="flex items-center shrink-0 relative z-10">
-          <h1 className="text-xl font-bold tracking-tight text-white uppercase">
-            Tasks
+        <div className="flex items-center gap-2.5 shrink-0 relative z-10 text-left">
+          <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <CheckSquare className="w-4 h-4" />
+          </div>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Task Pipeline
           </h1>
         </div>
 
-        {/* Search bar inside the header to satisfy "Search Tasks" requirement */}
+        {/* Search bar inside header */}
         <div className="flex-1 max-w-md relative mx-0 lg:mx-4">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-zinc-500" />
+          <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
           <input
             type="text"
-            placeholder="Search tasks..."
+            placeholder="Search objectives, tags, or deadlines..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-1.5 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-violet-500/50 focus:border-transparent font-mono placeholder:text-zinc-600"
+            className="w-full pl-10 pr-8 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 placeholder:text-slate-400 font-sans transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-2 text-zinc-500 hover:text-white cursor-pointer"
+              className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -631,16 +635,17 @@ export const TaskManagementView: React.FC = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0">
           <Button
             onClick={handleExecutePlanMyDay}
-            className="py-1.5 h-8.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-violet-600 hover:bg-violet-700 text-white border-none gap-1.5 shadow-lg shadow-violet-600/10"
+            className="py-2 px-3.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl gap-1.5 shadow-xs"
           >
             <Sparkles className="w-3.5 h-3.5" /> Plan My Day
           </Button>
           <Button
             onClick={() => setIsCreateDialogOpen(true)}
-            className="py-1.5 h-8.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-zinc-900 hover:bg-zinc-850 text-zinc-100 border border-zinc-800 gap-1.5 hover:text-white"
+            variant="secondary"
+            className="py-2 px-3.5 text-xs font-semibold rounded-xl gap-1.5"
           >
             <Plus className="w-3.5 h-3.5" /> New Task
           </Button>
@@ -662,26 +667,26 @@ export const TaskManagementView: React.FC = () => {
       />
 
       {/* 4. MAIN LAYOUT GRID (70% Task Board / 30% Recommendation Column) */}
-      <div className="grid grid-cols-1 xl:grid-cols-10 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-10 gap-6 text-left">
         
         {/* LEFT COLUMN: TASK BOARD (70%) */}
         <div className="xl:col-span-7 space-y-6">
           
           {/* View Toggles header */}
-          <div className="flex justify-between items-center border-b border-zinc-200/10 dark:border-zinc-800/40 pb-3">
-            <span className="text-xs font-black font-mono uppercase tracking-widest text-zinc-400 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-violet-400" /> Task Board ({filteredTasks.length})
+          <div className="flex justify-between items-center border-b border-slate-200/80 dark:border-slate-800/80 pb-3">
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-indigo-500" /> Active Tasks ({filteredTasks.length})
             </span>
 
-            <div className="flex bg-zinc-900/50 p-0.5 rounded-xl border border-zinc-800/40 shrink-0">
+            <div className="flex bg-slate-100 dark:bg-slate-800/80 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700/80 shrink-0">
               {(['kanban', 'list'] as const).map(mode => (
                 <button
                   key={mode}
                   onClick={() => setViewMode(mode)}
-                  className={`px-3 py-1.5 text-[9px] font-mono font-bold rounded-lg uppercase transition-all ${
+                  className={`px-3 py-1 text-xs font-medium rounded-lg capitalize transition-all cursor-pointer ${
                     viewMode === mode 
-                      ? 'bg-zinc-800 text-white shadow' 
-                      : 'text-zinc-500 hover:text-zinc-300'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold' 
+                      : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
                   }`}
                 >
                   {mode}

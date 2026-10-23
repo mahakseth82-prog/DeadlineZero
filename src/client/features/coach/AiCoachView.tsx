@@ -1056,72 +1056,75 @@ const handleVoiceInput = async () => {
       <PremiumBackgroundEffects />
 
       {/* 1. GREETING & HEADER CONTROL BAR */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 border-b border-white/[0.04] pb-6 text-left relative z-10">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 border-b border-slate-200/80 dark:border-slate-800/80 pb-6 text-left relative z-10">
         <div className="space-y-2">
-          <div className="flex flex-wrap items-center gap-3">
-            <Bot className="w-5 h-5 text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
-            <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-blue-400 uppercase">AI Productivity Coach</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <Bot className="w-3.5 h-3.5" />
+            </div>
+            <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">AI Productivity Advisor</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-2.5">
-            👋 {greetingByTime}, {userFirstName}
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {greetingByTime}, {userFirstName} 👋
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed">
-            Your personalized productivity mentor for structured focus and active goal recovery.
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-normal leading-relaxed">
+            Your personalized mentor for structured focus, timeline modeling, and deadline protection.
           </p>
         </div>
 
         {/* Clean, high-fidelity status header */}
-        <div className="flex items-center gap-4 bg-zinc-900/40 border border-white/[0.04] px-4.5 py-2.5 rounded-2xl self-start md:self-auto shadow-[0_4px_12px_rgba(0,0,0,0.15)] backdrop-blur-md">
+        <div className="flex items-center gap-4 bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 px-4 py-2.5 rounded-2xl self-start md:self-auto shadow-xs backdrop-blur-xl">
           <div className="flex items-center gap-2">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500" />
+            <span className="relative flex h-2 w-2">
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            <span className="text-xs font-mono font-semibold text-zinc-300">AI Connected</span>
+            <span className="text-xs font-medium text-slate-700 dark:text-slate-300">Advisor Connected</span>
           </div>
-          <div className="h-3 w-px bg-white/[0.08]" />
-          <div className="text-xs font-mono font-semibold text-zinc-400 flex items-center gap-1">
-            ⚡ <span className="text-amber-400 font-bold font-mono">{user?.currentStreak || 5} Day Streak</span>
+          <div className="h-3 w-px bg-slate-200 dark:bg-slate-700" />
+          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+            <span className="text-amber-600 dark:text-amber-400 font-semibold">{user?.currentStreak || 5} Day Streak</span>
           </div>
         </div>
       </div>
 
       {/* 4. CORE TWO-COLUMN AI WORKSPACE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
         
         {/* LEFT COLUMN: Suggested Actions, Workspace Metrics, Heuristics */}
-        <div className="lg:col-span-5 flex flex-col gap-8">
+        <div className="lg:col-span-5 flex flex-col gap-6">
           
           {/* Neural Presence Orb Card */}
-          <Card className="relative overflow-hidden bg-gradient-to-b from-blue-950/20 via-zinc-900/40 to-zinc-900/30 border-blue-500/15 p-4 flex flex-col items-center text-center group shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
-            <div className="w-full flex items-center justify-between pb-1 border-b border-white/[0.04]">
+          <Card className="relative overflow-hidden bg-white/70 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800/80 p-5 flex flex-col items-center text-center shadow-xs">
+            <div className="w-full flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800/80">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500" />
                 </span>
-                <span className="text-[9px] font-mono font-bold tracking-widest text-cyan-400 uppercase">
-                  Neural Core Active
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Focus Advisor Core
                 </span>
               </div>
-              <span className="text-[9px] font-mono text-zinc-500 font-semibold">Gemini 2.5 Flash</span>
+              <span className="text-[11px] font-medium text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-full">Gemini 2.5 Flash</span>
             </div>
-            <div className="my-1 cursor-grab active:cursor-grabbing">
+            <div className="my-2 cursor-grab active:cursor-grabbing">
               <AiAssistantOrb size={170} interactive={true} />
             </div>
             <div className="space-y-1">
-              <p className="text-xs font-bold text-white tracking-wide">Chrono AI Assistant Core</p>
-              <p className="text-[10px] text-zinc-400 font-light max-w-xs leading-relaxed">
-                Interactive real-time neural visualizer. Drag or hover to explore 3D particle state.
+              <p className="text-xs font-semibold text-slate-900 dark:text-white">Real-Time Cognitive Presence</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
+                Interactive spatial neural model. Drag or hover to inspect active cognitive stamina balance.
               </p>
             </div>
           </Card>
 
           {/* A. Suggested Actions */}
-          <div className="space-y-4 text-left">
-            <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest block">
-              SUGGESTED ACTIONS
+          <div className="space-y-3.5 text-left">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              Suggested Actions
             </span>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-3">
               {[
                 { 
                   title: "Daily Summary", 
@@ -1131,8 +1134,7 @@ const handleVoiceInput = async () => {
                   impact: "Save 45 mins",
                   confidence: "95% Match",
                   priority: "SUMMARY",
-                  accent: "group-hover:text-blue-400 border-blue-500/10 group-hover:border-blue-500/20",
-                  hoverGlow: "group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] group-hover:border-blue-500/30"
+                  accent: "text-indigo-500 bg-indigo-500/10 border-indigo-500/20"
                 },
                 { 
                   title: "Task Recommendation", 
@@ -1142,8 +1144,7 @@ const handleVoiceInput = async () => {
                   impact: "Save 30 mins",
                   confidence: "91% Match",
                   priority: "FOCUS",
-                  accent: "group-hover:text-cyan-400 border-cyan-500/10 group-hover:border-cyan-500/20",
-                  hoverGlow: "group-hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] group-hover:border-cyan-500/30"
+                  accent: "text-sky-500 bg-sky-500/10 border-sky-500/20"
                 },
                 { 
                   title: "Weekly Review", 
@@ -1152,51 +1153,42 @@ const handleVoiceInput = async () => {
                   icon: LineChart,
                   impact: "Deep Clarity",
                   confidence: "94% Match",
-                  priority: "RETROSPECTIVE",
-                  accent: "group-hover:text-violet-400 border-violet-500/10 group-hover:border-violet-500/20",
-                  hoverGlow: "group-hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] group-hover:border-violet-500/30"
+                  priority: "REVIEW",
+                  accent: "text-violet-500 bg-violet-500/10 border-violet-500/20"
                 },
                 { 
                   title: "Plan My Day", 
-                  desc: "Structure today's study blocks", 
+                  desc: "Structure today's focus blocks", 
                   prompt: "Optimize Today", 
                   icon: Calendar,
                   impact: "Save 40 mins",
                   confidence: "92% Match",
                   priority: "TIMELINE",
-                  accent: "group-hover:text-emerald-400 border-emerald-500/10 group-hover:border-emerald-500/20",
-                  hoverGlow: "group-hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] group-hover:border-emerald-500/30"
+                  accent: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20"
                 }
               ].map((card, idx) => {
                 const IconComp = card.icon;
                 return (
                   <motion.div
                     key={idx}
-                    whileHover={{ y: -3, scale: 1.01 }}
+                    whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleSendMessage(card.prompt)}
-                    className={`p-4.5 bg-zinc-900/30 hover:bg-blue-950/5 border border-white/[0.04] rounded-2xl cursor-pointer group transition-all duration-300 relative overflow-hidden text-left shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] ${card.hoverGlow}`}
+                    className="p-4 bg-white/70 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-800/80 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl cursor-pointer group transition-all duration-150 relative overflow-hidden text-left shadow-xs hover:border-indigo-500/30"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-blue-500/0 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                    
-                    <div className="flex items-center gap-2.5 mb-2 relative z-10">
-                      <div className="p-1.5 rounded-xl bg-white/[0.02] border border-white/[0.05] group-hover:bg-blue-500/10 transition-colors">
-                        <motion.div
-                          whileHover={{ rotate: 5, scale: 1.1 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <IconComp className={`w-4 h-4 text-zinc-400 ${card.accent} transition-colors duration-300`} />
-                        </motion.div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${card.accent}`}>
+                        <IconComp className="w-4 h-4" />
                       </div>
-                      <span className="text-xs font-black text-white group-hover:text-blue-400 transition-colors tracking-wide">{card.title}</span>
+                      <span className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors">{card.title}</span>
                     </div>
                     
-                    <p className="text-[11px] text-zinc-400 leading-normal font-light mb-3 relative z-10">{card.desc}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal mb-3 font-normal">{card.desc}</p>
                     
-                    <div className="flex items-center justify-between pt-2 border-t border-white/[0.03] text-[9px] font-mono font-semibold text-zinc-500 relative z-10">
-                      <span className="text-blue-400/85">{card.impact}</span>
-                      <span className="text-zinc-400">{card.confidence}</span>
-                      <span className="text-zinc-500">{card.priority}</span>
+                    <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-medium text-slate-400">
+                      <span className="text-indigo-500 dark:text-indigo-400">{card.impact}</span>
+                      <span>{card.confidence}</span>
+                      <span>{card.priority}</span>
                     </div>
                   </motion.div>
                 );
@@ -1207,26 +1199,26 @@ const handleVoiceInput = async () => {
         </div>
 
         {/* RIGHT COLUMN: Interactive Chat Terminal */}
-        <div className="lg:col-span-7 flex flex-col bg-zinc-950/15 border border-white/[0.04] rounded-3xl shadow-[0_24px_50px_rgba(0,0,0,0.5)] relative overflow-hidden min-h-[600px] lg:h-[calc(100vh-200px)]">
+        <div className="lg:col-span-7 flex flex-col bg-white/80 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl shadow-sm dark:shadow-[0_8px_30px_rgba(0,0,0,0.25)] relative overflow-hidden min-h-[600px] lg:h-[calc(100vh-200px)]">
           
           {/* Frosted Chat Header Section */}
-          <div className="bg-zinc-950/60 border-b border-white/[0.04] py-4 px-6 flex items-center justify-between z-10 flex-shrink-0 backdrop-blur-xl">
-            <div className="flex items-center gap-3.5">
+          <div className="bg-slate-50/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80 py-4 px-6 flex items-center justify-between z-10 flex-shrink-0 backdrop-blur-xl">
+            <div className="flex items-center gap-3">
               <ChronoAvatar 
                 isThinking={loading} 
                 isResponding={messages.length > 1 && messages[messages.length - 1].sender === 'coach' && !loading} 
               />
               <div className="text-left">
-                <h3 className="text-sm font-black text-white tracking-wide">AI Coach</h3>
-                <p className="text-[10px] text-blue-400 font-mono tracking-widest uppercase">
-                  {loading ? 'THINKING...' : 'ONLINE'}
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">AI Coach Advisor</h3>
+                <p className="text-xs text-indigo-500 dark:text-indigo-400 font-medium">
+                  {loading ? 'Evaluating workload...' : 'Active & Ready'}
                 </p>
               </div>
             </div>
             
-            <div className="flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1 text-[9px] font-mono tracking-wider text-blue-300 shadow-inner">
-              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
-              <span>ACTIVE SESSION</span>
+            <div className="flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 rounded-full px-3 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+              <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />
+              <span>Active Session</span>
             </div>
           </div>
 
@@ -1348,31 +1340,41 @@ const handleVoiceInput = async () => {
             )}
           </div>
 
-          {/* Frosted Command bar message input */}
-          <div className="flex items-center gap-3">
-  <input
-    type="text"
-    value={inputText}
-    disabled={loading}
-    onChange={(e) => setInputText(e.target.value)}
-    placeholder="Ask AI Coach to summarize progress, prioritize tasks, or suggest schedules..."
-    onKeyDown={(e) => e.key === "Enter" && handleSendMessage(inputText)}
-    className="flex-1 px-5 py-3.5 text-xs sm:text-sm bg-white/[0.01] border border-white/[0.06] focus:border-blue-500/40 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-500/5 text-white placeholder-zinc-500 disabled:opacity-50 transition-all font-light"
-  />
+          {/* Command bar message input */}
+          <div className="p-4 border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 flex items-center gap-3">
+            <input
+              type="text"
+              value={inputText}
+              disabled={loading}
+              onChange={(e) => setInputText(e.target.value)}
+              placeholder="Ask AI Coach to summarize progress, prioritize tasks, or suggest schedules..."
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage(inputText)}
+              className="flex-1 px-4 py-3 text-xs sm:text-sm bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 focus:border-indigo-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-900 dark:text-white placeholder-slate-400 disabled:opacity-50 transition-all font-sans"
+            />
 
-  <button
-    type="button"
-    onClick={handleVoiceInput}
-    disabled={isListening || loading}
-    className={`h-12 w-12 rounded-full flex items-center justify-center transition-all ${
-      isListening
-        ? "bg-red-500 text-white animate-pulse"
-        : "bg-violet-600 hover:bg-violet-700 text-white"
-    }`}
-  >
-    {isListening ? "🎙️" : "🎤"}
-  </button>
-</div>
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              disabled={isListening || loading}
+              className={`h-11 w-11 rounded-xl flex items-center justify-center transition-all ${
+                isListening
+                  ? "bg-rose-500 text-white animate-pulse"
+                  : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 cursor-pointer"
+              }`}
+              title="Voice Input"
+            >
+              {isListening ? "🎙️" : "🎤"}
+            </button>
+
+            <Button
+              onClick={() => handleSendMessage(inputText)}
+              disabled={!inputText.trim() || loading}
+              className="h-11 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold gap-1.5"
+            >
+              <Send className="w-4 h-4" />
+              <span className="hidden sm:inline">Send</span>
+            </Button>
+          </div>
         </div>
 
       </div>
