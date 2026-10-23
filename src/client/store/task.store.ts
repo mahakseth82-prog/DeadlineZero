@@ -334,6 +334,9 @@ await TaskService.createTask(newTask);
   }));
 },
   toggleSubtask: (taskId, subtaskId) => {
+    let targetSubtasks: Subtask[] = [];
+    let calculatedStatus: TaskStatus = TaskStatus.TODO;
+
     set((state) => ({
       tasks: state.tasks.map((task) => {
         if (task.id === taskId) {
@@ -353,6 +356,9 @@ await TaskService.createTask(newTask);
             }
           }
 
+          targetSubtasks = updatedSubtasks;
+          calculatedStatus = newStatus;
+
           return {
             ...task,
             subtasks: updatedSubtasks,
@@ -363,6 +369,14 @@ await TaskService.createTask(newTask);
         return task;
       }),
     }));
+
+    if (targetSubtasks.length > 0) {
+      TaskService.updateTask(taskId, { 
+        subtasks: targetSubtasks, 
+        status: calculatedStatus, 
+        updatedAt: new Date().toISOString() 
+      }).catch((err) => console.error("Failed to sync subtask toggle to Firestore:", err));
+    }
   },
 
   addSubtask: (taskId, title) => {
@@ -372,6 +386,9 @@ await TaskService.createTask(newTask);
       title,
       completed: false,
     };
+
+    let targetSubtasks: Subtask[] = [];
+    let calculatedStatus: TaskStatus = TaskStatus.TODO;
 
     set((state) => ({
       tasks: state.tasks.map((task) => {
@@ -383,6 +400,9 @@ await TaskService.createTask(newTask);
             newStatus = TaskStatus.IN_PROGRESS;
           }
 
+          targetSubtasks = updatedSubtasks;
+          calculatedStatus = newStatus;
+
           return {
             ...task,
             subtasks: updatedSubtasks,
@@ -393,9 +413,20 @@ await TaskService.createTask(newTask);
         return task;
       }),
     }));
+
+    if (targetSubtasks.length > 0) {
+      TaskService.updateTask(taskId, { 
+        subtasks: targetSubtasks, 
+        status: calculatedStatus, 
+        updatedAt: new Date().toISOString() 
+      }).catch((err) => console.error("Failed to sync subtask addition to Firestore:", err));
+    }
   },
 
   updateSubtask: (taskId, subtaskId, updates) => {
+    let targetSubtasks: Subtask[] = [];
+    let calculatedStatus: TaskStatus = TaskStatus.TODO;
+
     set((state) => ({
       tasks: state.tasks.map((task) => {
         if (task.id === taskId) {
@@ -415,6 +446,9 @@ await TaskService.createTask(newTask);
             }
           }
 
+          targetSubtasks = updatedSubtasks;
+          calculatedStatus = newStatus;
+
           return {
             ...task,
             subtasks: updatedSubtasks,
@@ -425,9 +459,20 @@ await TaskService.createTask(newTask);
         return task;
       }),
     }));
+
+    if (targetSubtasks.length > 0) {
+      TaskService.updateTask(taskId, { 
+        subtasks: targetSubtasks, 
+        status: calculatedStatus, 
+        updatedAt: new Date().toISOString() 
+      }).catch((err) => console.error("Failed to sync subtask update to Firestore:", err));
+    }
   },
 
   deleteSubtask: (taskId, subtaskId) => {
+    let targetSubtasks: Subtask[] = [];
+    let calculatedStatus: TaskStatus = TaskStatus.TODO;
+
     set((state) => ({
       tasks: state.tasks.map((task) => {
         if (task.id === taskId) {
@@ -442,6 +487,9 @@ await TaskService.createTask(newTask);
             }
           }
 
+          targetSubtasks = updatedSubtasks;
+          calculatedStatus = newStatus;
+
           return {
             ...task,
             subtasks: updatedSubtasks,
@@ -452,6 +500,14 @@ await TaskService.createTask(newTask);
         return task;
       }),
     }));
+
+    if (targetSubtasks.length > 0) {
+      TaskService.updateTask(taskId, { 
+        subtasks: targetSubtasks, 
+        status: calculatedStatus, 
+        updatedAt: new Date().toISOString() 
+      }).catch((err) => console.error("Failed to sync subtask deletion to Firestore:", err));
+    }
   },
 
   getTaskTriage: (taskId) => {

@@ -395,31 +395,83 @@ export const TaskManagementView: React.FC = () => {
     setNewProject('');
     setTempSubtasks([]);
   };
-const handleVoiceInput = async () => {
-  try {
-    setIsListening(true);
+  const handleVoiceInput = async () => {
+    try {
+      setIsListening(true);
+      const transcript = await speechService.startListening();
 
-    const transcript = await speechService.startListening();
+      if (!transcript || !transcript.trim()) {
+        addToast("Voice Notice", "No speech detected. Please try again.", "info");
+        return;
+      }
 
-    setNewTitle(transcript);
+      // Immediately set the raw transcript so user sees fast feedback
+      setNewTitle(transcript);
+      addToast("AI Parsing Voice", "Gemini is structuring your task properties...", "info");
 
-    addToast(
-      "Voice Captured",
-      "Speech converted successfully.",
-      "success"
-    );
-  } catch (error) {
-    console.error(error);
+      try {
+        const response = await fetch("/api/ai/voice-parse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ voiceText: transcript }),
+        });
 
-    addToast(
-      "Voice Error",
-      "Unable to recognize speech.",
-      "error"
-    );
-  } finally {
-    setIsListening(false);
-  }
-};
+        if (response.ok) {
+          const parsed = await response.json();
+          if (parsed.title) setNewTitle(parsed.title);
+          if (parsed.description) setNewDesc(parsed.description);
+          if (parsed.priority && Object.values(TaskPriority).includes(parsed.priority as TaskPriority)) {
+            setNewPriority(parsed.priority as TaskPriority);
+          }
+          if (parsed.estimatedTime && typeof parsed.estimatedTime === 'number') {
+            setNewEstTime(parsed.estimatedTime);
+          }
+          if (parsed.difficultyScore) {
+            setNewDifficulty(Math.min(10, Math.max(1, Number(parsed.difficultyScore))));
+          }
+          if (parsed.energyRequirement && ['LOW', 'MEDIUM', 'HIGH'].includes(parsed.energyRequirement)) {
+            setNewEnergy(parsed.energyRequirement as 'LOW' | 'MEDIUM' | 'HIGH');
+          }
+          if (parsed.deadline) {
+            const d = new Date(parsed.deadline);
+            if (!isNaN(d.getTime())) {
+              const formatted = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+              setNewDeadline(formatted);
+            }
+          }
+          if (parsed.categoryName && categories.length > 0) {
+            const matchedCat = categories.find(c => 
+              c.name.toLowerCase().includes(parsed.categoryName.toLowerCase()) ||
+              parsed.categoryName.toLowerCase().includes(c.name.toLowerCase())
+            );
+            if (matchedCat) {
+              setNewCatId(matchedCat.id);
+            }
+          }
+
+          addToast(
+            "Voice Task Structured",
+            "Gemini auto-extracted priority, deadline, effort & category!",
+            "success"
+          );
+        } else {
+          addToast("Voice Captured", "Transcript captured directly.", "success");
+        }
+      } catch (aiErr) {
+        console.warn("AI voice parsing network error, falling back to transcript:", aiErr);
+        addToast("Voice Captured", "Speech converted successfully.", "success");
+      }
+    } catch (error) {
+      console.error(error);
+      addToast(
+        "Voice Error",
+        "Unable to recognize speech.",
+        "error"
+      );
+    } finally {
+      setIsListening(false);
+    }
+  };
   // Triggering Edit Mode
   const handleStartEdit = (task: Task, e: React.MouseEvent) => {
     e.stopPropagation();

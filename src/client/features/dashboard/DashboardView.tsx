@@ -60,18 +60,51 @@ export const DashboardView: React.FC = () => {
     navigate('/app/focus-room');
   };
 
-  const handleTriggerEmergencyPanic = (task: Task) => {
-    triggerPanic(
-      task.id,
-      task.title,
-      2, // 2 hours
-      [
-        { title: 'Write down structural index elements', durationMinutes: 20 },
-        { title: 'Formulate core visual containers', durationMinutes: 30 },
-        { title: 'Conduct final compilation audit checks', durationMinutes: 15 }
-      ]
-    );
-    addToast('Panic Mode Activated', `Proactive recovery roadmap generated for "${task.title}"!`, 'warning');
+  const handleTriggerEmergencyPanic = async (task: Task) => {
+    // 1. If task already has incomplete subtasks, build the sprint around them!
+    const incompleteSubtasks = task.subtasks?.filter(s => !s.completed) || [];
+    let steps: { title: string; durationMinutes: number }[] = [];
+
+    if (incompleteSubtasks.length > 0) {
+      steps = incompleteSubtasks.map(s => ({
+        title: s.title,
+        durationMinutes: Math.max(15, Math.round((task.estimatedTime || 60) / incompleteSubtasks.length))
+      }));
+    } else {
+      // 2. Fetch AI-generated emergency breakdown or use contextual fallback
+      try {
+        const res = await fetch('/api/ai/task-breakdown', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ taskTitle: task.title, taskDescription: task.description || '' }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.subtasks && Array.isArray(data.subtasks) && data.subtasks.length > 0) {
+            steps = data.subtasks.map((st: string) => ({
+              title: st,
+              durationMinutes: Math.max(15, Math.round((task.estimatedTime || 60) / data.subtasks.length))
+            }));
+          }
+        }
+      } catch (e) {
+        console.warn('AI breakdown fallback in panic trigger:', e);
+      }
+
+      if (steps.length === 0) {
+        steps = [
+          { title: `Triage critical requirements for "${task.title}"`, durationMinutes: 20 },
+          { title: `Execute core deliverable components`, durationMinutes: Math.max(30, Math.round((task.estimatedTime || 60) * 0.5)) },
+          { title: `Conduct quality audit & compliance checks`, durationMinutes: 15 },
+          { title: `Finalize deployment and submission`, durationMinutes: 15 }
+        ];
+      }
+    }
+
+    const durationHours = Math.max(1, Math.ceil(steps.reduce((acc, s) => acc + s.durationMinutes, 0) / 60));
+
+    triggerPanic(task.id, task.title, durationHours, steps);
+    addToast('Panic Mode Activated', `Tactical AI recovery roadmap generated for "${task.title}"!`, 'warning');
     navigate('/app/panic-mode');
   };
 

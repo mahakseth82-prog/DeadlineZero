@@ -56,10 +56,10 @@ export const SettingsView: React.FC = () => {
   const [username, setUsername] = useState(
   () => user?.fullName || user?.email?.split("@")[0] || ""
 );
-  const [email, setEmail] = useState(() => user?.email || 'mahakseth82@gmail.com');
+  const [email, setEmail] = useState(() => user?.email || '');
   const [avatar, setAvatar] = useState(() => user?.avatar || AVATAR_PRESETS[0]);
-  const [occupation, setOccupation] = useState(() => user?.occupation || 'Student / Freelancer');
-  const [bio, setBio] = useState(() => user?.bio || 'Computer Science student and freelance web developer.');
+  const [occupation, setOccupation] = useState(() => user?.occupation || 'Software Engineer');
+  const [bio, setBio] = useState(() => user?.bio || 'Productivity enthusiast focused on beating deadlines.');
   const [isEditProfileMode, setIsEditProfileMode] = useState(false);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [showDeleteAccountDialog, setShowDeleteAccountDialog] = useState(false);

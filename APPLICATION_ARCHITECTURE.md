@@ -13,94 +13,40 @@ Below is the production-ready directory tree for the entire full-stack monorepo,
 ```text
 deadlinezero/
 ├── .env.example                     # Environment variable blueprints
-├── .gitignore                       # Ignored file patterns
-├── index.html                       # SPA Root HTML entry-point
-├── metadata.json                    # Application metadata & permissions config
-├── package.json                     # Monorepo dependencies & script orchestration
-├── tsconfig.json                    # Root TypeScript configuration
-├── vite.config.ts                   # Vite compiler pipeline & dev proxy rules
-│
-├── prisma/                          # Database Definition Folder
-│   └── schema.prisma                # Finalized Prisma DB models, indices, and relationships
-│
-├── src/                             # Core Application Code
-│   ├── main.tsx                     # React client-side bootstrap entry-point
+├── .github/workflows/ci.yml         # GitHub Actions automated CI pipeline
+├── server.ts                        # Express API Gateway & Gemini AI SDK integration
+├── test/
+│   └── triage.test.ts               # Automated algorithmic unit tests
+├── src/
+│   ├── main.tsx                     # React 19 client bootstrap entry
+│   ├── App.tsx                      # Route orchestration & protected shell layout
 │   ├── index.css                    # Tailwind CSS base styling & custom tokens
 │   ├── types.ts                     # Unified shared TypeScript models & types
-│   │
-│   ├── server/                      # Express Backend Layer
-│   │   ├── index.ts                 # Express core application entry-point
-│   │   ├── config.ts                # Environment configurations (Gemini, JWT, Postgres)
-│   │   │
-│   │   ├── controllers/             # Express Route Handlers (Request parsing, state validation)
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── task.controller.ts
-│   │   │   ├── calendar.controller.ts
-│   │   │   ├── focus.controller.ts
-│   │   │   ├── triage.controller.ts
-│   │   │   └── coach.controller.ts
-│   │   │
-│   │   ├── routes/                  # Express Router Mappings
-│   │   │   ├── auth.routes.ts
-│   │   │   ├── task.routes.ts
-│   │   │   ├── calendar.routes.ts
-│   │   │   ├── focus.routes.ts
-│   │   │   ├── triage.routes.ts
-│   │   │   ├── coach.routes.ts
-│   │   │   └── index.ts             # Global router bundle (/api)
-│   │   │
-│   │   ├── middlewares/             # Request Interceptors
-│   │   │   ├── auth.middleware.ts   # JWT / OAuth validation and session checks
-│   │   │   ├── error.middleware.ts  # Centralized exception logging and JSON formatting
-│   │   │   └── rate-limit.ts        # Route-level rate limiting (especially AI routes)
-│   │   │
-│   │   └── services/                # Heavy Business Logic & Third-Party Integrations
-│   │       ├── db.service.ts        # Prisma Client instantiation with active connections
-│   │       ├── gemini.service.ts    # Server-Side Google Gen AI (@google/genai SDK)
-│   │       ├── task-triage.service.ts # AI risk prediction algorithms
-│   │       ├── automation.service.ts  # Overdue task sweeps & active scheduler agent
-│   │       ├── storage.service.ts   # Cloudinary stream upload handlers
-│   │       └── notify.service.ts    # SSE (Server-Sent Events) dispatch hub
-│   │
-│   └── client/                      # React Frontend SPA Layer
-│       ├── components/              # Reusable UI Controls (Presentational / Dumb Components)
-│       │   ├── ui/                  # Shadcn primitive design system blocks
-│       │   │   ├── Button.tsx
-│       │   │   ├── Card.tsx
-│       │   │   ├── Input.tsx
-│       │   │   └── Dialog.tsx
-│       │   ├── charts/              # Recharts analytical components
-│       │   │   ├── ProductivityTrend.tsx
-│       │   │   └── FocusMetrics.tsx
-│       │   └── layout/              # Structural wrappers
-│       │       ├── Header.tsx
-│       │       ├── Sidebar.tsx
-│       │       └── AppLayout.tsx
-│       │
-│       ├── features/                # Complex Domain-Driven Stateful Feature Modules
-│       │   ├── landing/             # Public landing pages and marketing funnels
-│       │   ├── auth/                # Sign In, SignUp, and Profile Management forms
-│       │   ├── onboarding/          # Step-by-step goals & career assessment sequence
-│       │   ├── dashboard/           # Widget containers (Risk Indicators, Today's focus)
-│       │   ├── tasks/               # Kanban boards, task detail drawers, list views
-│       │   ├── calendar/            # Month, Week, and Day planning grids
-│       │   ├── focus-room/          # Pomodoro timers & ambient sounds engine
-│       │   ├── panic-mode/          # Critical risk count-downs & emergency AI plans
-│       │   └── coach/               # Conversational chat sidebars and action modules
-│       │
-│       ├── hooks/                   # Custom utility custom hooks
-│       │   ├── useAudio.ts          # Focus-room sound synthesizers & ambient loops
-│       │   └── useSpeech.ts         # Voice command & dictation API bindings
-│       │
-│       ├── services/                # Client-Side HTTP API client
-│       │   └── api.ts               # Axios / Fetch client wrapped with JWT interceptors
-│       │
-│       └── store/                   # Zustand Unified Frontend Global Store Engine
-│           ├── auth.store.ts        # Token cache, session metadata, profile data
-│           ├── ui.store.ts          # Active themes, notifications, drawer open states
-│           ├── focus.store.ts       # Live Pomodoro timers and active countdown state
-│           └── panic.store.ts       # Active panic rooms and recovery state
+│   ├── lib/
+│   │   └── firebase.ts              # Firebase Client SDK initialization (Auth & Firestore)
+│   └── client/
+│       ├── components/              # Shared UI design system & futuristic visual cores
+│       │   ├── ui/                  # Reusable primitives (Button, Card, Dialog)
+│       │   ├── futuristic/          # Canvas cores (ChronoCore, EmergencyCountdownCore, FocusEnergyCore)
+│       │   └── layout/              # AppLayout shell with reactive navigation
+│       ├── features/                # Domain-Driven Feature Modules:
+│       │   ├── landing/             # Public landing view & value proposition
+│       │   ├── auth/                # Sign-in & sign-up flows
+│       │   ├── onboarding/          # Step-by-step goals & career assessment
+│       │   ├── dashboard/           # Triage indicators & quick focus triggers
+│       │   ├── tasks/               # Multi-view task manager with Gemini voice parsing
+│       │   ├── coach/               # AI Productivity Coach with temporal reasoning
+│       │   ├── focus-room/          # Pomodoro timer & Web Audio API ambient synthesizer
+│       │   ├── panic-mode/          # Dynamic emergency sprints & countdown
+│       │   ├── calendar/            # High-density schedule grid & time-blocking
+│       │   ├── analytics/           # Deep cognitive stamina, fatigue & velocity metrics
+│       │   ├── profile/             # Workspace memory register, achievements & timeline
+│       │   └── settings/            # Personalization & account management
+│       ├── services/                # Firestore & Firebase Authentication data layer
+│       ├── store/                   # Zustand state engines (task, focus, panic, ui, auth)
+│       └── utils/                   # Triage scoring algorithm, audio & speech utilities
 ```
+
 
 ---
 

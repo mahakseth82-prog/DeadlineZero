@@ -7,22 +7,51 @@
 
 ---
 
-## 1. Architectural Strategy & Design Principles
+## 1. Architectural Strategy & Dual-Tier Design
 
-DeadlineZero is an offline-first-ready, real-time-capable productivity platform designed to help users prevent missed deadlines. The relational structure of PostgreSQL offers the robust data-integrity, complex joining, and strict transactional capabilities required to compute:
-- Real-time task dependencies
-- Dynamic scheduling slot overlaps
-- Historical focus analytics
-- Algorithmic gamification state machines (XP, Levels, Streaks)
-- Hierarchical risk calculations across task lists
-
-This document outlines the complete relational model, indexing strategy, referential actions (cascades), and database optimization strategies built for hyper-performance and future-proof horizontal scalability.
+DeadlineZero utilizes a **two-tier database evolution strategy**:
+- **Active Production Tier (Cloud Firestore NoSQL)**: Optimized for sub-millisecond real-time listener subscriptions, offline-first client caching, and auto-scaling serverless document operations on Google Cloud.
+- **Enterprise Relational Roadmap (PostgreSQL + Prisma ORM)**: Designed for future enterprise multi-tenant team workspaces, complex recursive dependency trees, and foreign-key strict referential constraints.
 
 ---
 
-## 2. Full Prisma Schema
+## 1.1 Active Production Schema (Cloud Firestore)
 
-Below is the production-ready Prisma schema representing the complete relational topology.
+The live production application persists state across four primary root collections:
+
+### 1. `users/{userId}`
+- `uid`: `string` (Firebase Auth UID)
+- `name`: `string`
+- `email`: `string`
+- `productivityScore`: `number` (0–100)
+- `focusScore`: `number` (0–100)
+- `currentStreak`: `number`
+- `longestStreak`: `number`
+- `createdAt`: `FieldValue.serverTimestamp()`
+
+### 2. `tasks/{taskId}`
+- `id`: `string` (`t-${timestamp}`)
+- `userId`: `string` (Owner UID, indexed for query isolation)
+- `title`: `string`
+- `description`: `string`
+- `deadline`: `string` (ISO 8601 UTC)
+- `priority`: `'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'`
+- `status`: `'TODO' | 'IN_PROGRESS' | 'COMPLETED' | 'OVERDUE'`
+- `estimatedTime`: `number` (in minutes)
+- `difficultyScore`: `number` (1.0 to 10.0)
+- `energyRequirement`: `'LOW' | 'MEDIUM' | 'HIGH'`
+- `subtasks`: `Array<{ id: string, taskId: string, title: string, completed: boolean }>`
+- `createdAt` / `updatedAt`: `string` (ISO 8601)
+
+### 3. Firestore Compound Indices
+- `tasks` collection: `userId (ASC) + deadline (ASC)` — Powers deadline triage sweeps.
+- `tasks` collection: `userId (ASC) + status (ASC) + priority (DESC)` — Powers the AI Coach backlog analyzer.
+
+---
+
+## 2. Enterprise Relational Specification (PostgreSQL + Prisma)
+
+Below is the forward-looking relational schema for enterprise deployments requiring relational graph queries, team workspace tenancy, and transactional multi-table dependencies.
 
 ```prisma
 datasource db {

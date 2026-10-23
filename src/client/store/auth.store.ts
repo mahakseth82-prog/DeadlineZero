@@ -29,21 +29,21 @@ googleLogin: () => Promise<boolean>;
 }
 
 const DEFAULT_MOCK_PROFILE: UserProfile = {
-  id: 'usr-928374',
-  userId: 'usr-928374',
-   fullName: '',
-  email: 'mahakseth82@gmail.com',
+  id: '',
+  userId: '',
+  fullName: '',
+  email: '',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&h=256&fit=crop',
-  bio: 'Computer Science student and freelance web developer.',
-  occupation: 'Student / Freelancer',
-  goals: ['Avoid missing project deadlines', 'Optimize deep focus patterns', 'Succeed in hackathon demos'],
+  bio: 'Productivity enthusiast focused on beating deadlines.',
+  occupation: 'Software Engineer',
+  goals: ['Avoid missing project deadlines', 'Optimize deep focus patterns', 'Maintain peak cognitive velocity'],
   workingHoursStart: '09:00',
   workingHoursEnd: '18:00',
-  productivityScore: 78,
-  focusScore: 84,
-  timezone: 'America/Los_Angeles',
-  currentStreak: 5,
-  longestStreak: 12,
+  productivityScore: 85,
+  focusScore: 88,
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+  currentStreak: 3,
+  longestStreak: 7,
 };
 
 export const useAuthStore = create<AuthState>()(
